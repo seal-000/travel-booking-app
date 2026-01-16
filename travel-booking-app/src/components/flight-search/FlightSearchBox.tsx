@@ -7,6 +7,7 @@ const FlightSearchBox = () => {
 
     const [tripType, setTripType] = useState('oneway');
     const [cabinClass, setCabinClass] = useState('economy');
+    const [directFlightsOnly, setDirectFlightsOnly] = useState(false);
     
     const getTripTypeLabel = () => {
     if (tripType === 'roundtrip') return 'Round Trip';
@@ -25,7 +26,10 @@ const FlightSearchBox = () => {
                 onTripTypeChange={setTripType}
                 cabinClass={cabinClass}
                 onCabinClassChange={setCabinClass}
+                directFlightsOnly={directFlightsOnly}
+                onDirectFlightsChange={setDirectFlightsOnly}
             />
+            
         </Box>
     );
 

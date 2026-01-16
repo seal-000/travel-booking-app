@@ -18,3 +18,10 @@
     align-items: center;
   }
 }
+
+.trip-options-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;                     /* gap: 4 means 4 * 0.25rem (usually), so 1rem */
+}

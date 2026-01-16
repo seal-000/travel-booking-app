@@ -1,14 +1,14 @@
 import React from 'react';
 import { Select, MenuItem, FormControl as MuiFormControl, InputLabel } from '@mui/material';
 
-interface FormControlProps {
+interface FormControlMenuProps {
     label: string;
     value: string;
     onChange: (value: string) => void;
     options: { label: string; value: string }[];
 }
 
-const FormControl: React.FC<FormControlProps> = ({ label, value, onChange, options }) => {
+const FormControlMenu: React.FC<FormControlMenuProps> = ({ label, value, onChange, options }) => {
     return (
         <MuiFormControl>
             <InputLabel>{label}</InputLabel>
@@ -27,4 +27,4 @@ const FormControl: React.FC<FormControlProps> = ({ label, value, onChange, optio
     );
 };
 
-export default FormControl;
+export default FormControlMenu;
