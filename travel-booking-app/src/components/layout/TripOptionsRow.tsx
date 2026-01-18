@@ -1,5 +1,5 @@
 import React from 'react';
-import './TripOptionsRow.css';
+import './Trip.css';
 import TripTypeRadioGroup from '../fields/TripTypeRadioGroup';
 import FormControlMenu from '../fields/FormControlMenu';
 import FormControlLabel from '../fields/FormControlLabel';

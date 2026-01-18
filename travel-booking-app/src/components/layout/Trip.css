@@ -19,6 +19,7 @@
   }
 }
 
+/* Right section styles */
 .trip-options-right {
   display: flex;
   flex-direction: row;
