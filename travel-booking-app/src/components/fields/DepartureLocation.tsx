@@ -2,6 +2,8 @@ import React, { useState, useCallback } from 'react';
 import type { Airport } from '../../services/airportService';
 import { searchAirports } from '../../services/airportService';
 import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlaneDeparture } from '@fortawesome/free-solid-svg-icons';
 
 import { Button, Popper, Fade, Paper, Typography, ClickAwayListener, TextField } from '@mui/material';
 import './DepartureLocation.css';
@@ -12,7 +14,8 @@ const DepartureLocation: React.FC = () => {
       <PopupState variant="popper" popupId="departure-popup-popper">
       {(popupState) => (
         <div>
-          <Button variant="contained"  {...bindToggle(popupState)}>
+          <Button variant="contained" className='departure-button' {...bindToggle(popupState)}>
+            <FontAwesomeIcon icon={faPlaneDeparture} />
             Leaving from
           </Button>
           <Popper {...bindPopper(popupState)} placement="bottom-start" transition>

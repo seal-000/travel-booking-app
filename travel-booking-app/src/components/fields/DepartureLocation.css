@@ -14,3 +14,16 @@
   top: -8px;
   left: 20px;
 }
+
+.departure-button {
+  background-color: white !important;
+  color: black !important;
+  border: 2px solid #1a237e !important;
+  gap: 0.5rem !important;
+}
+
+.departure-button:active,
+.departure-button:focus {
+  border-color: #0d1b5e !important;
+  box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.3) !important;
+}
