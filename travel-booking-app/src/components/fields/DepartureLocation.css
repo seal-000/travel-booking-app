@@ -1,0 +1,16 @@
+
+.departure-location-paper {
+  background-color: #69bc54 !important;
+  margin-top: 1rem
+}
+
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #69bc54;
+  top: -8px;
+  left: 20px;
+}

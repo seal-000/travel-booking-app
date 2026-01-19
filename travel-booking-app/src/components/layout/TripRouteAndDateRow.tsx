@@ -23,10 +23,7 @@ const TripRouteAndDateRow = ({ tripType, segmentCount }: TripRouteAndDateRowProp
             <>
                 {Array.from({ length: segmentCount }, (_, index) => (
                     <div className="trip-options-row" key={index}>
-                        <DepartureLocation 
-                            value={departures[index] || null}
-                            onChange={(airport) => handleDepartureChange(index, airport)}
-                        />
+                        <DepartureLocation />
                     </div>
                 ))}
             </>
@@ -35,11 +32,9 @@ const TripRouteAndDateRow = ({ tripType, segmentCount }: TripRouteAndDateRowProp
 
     return (
         <div className="trip-options-row">
-            <DepartureLocation 
-                value={departures[0] || null}
-                onChange={(airport) => handleDepartureChange(0, airport)}
-            />
+            <DepartureLocation />
         </div>
+        
     );
 };
 
