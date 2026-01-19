@@ -34,12 +34,15 @@ const FlightSearchBox = () => {
             <TripRouteAndDateRow 
                 tripType={tripType}
                 segmentCount={multiCitySegments}
+                onSegmentCountChange={setMultiCitySegments}
             />
           
             <Box>
 
-                  {tripType === 'multicity' && (
-                <button onClick={() => setMultiCitySegments(multiCitySegments + 1)}>
+                {tripType === 'multicity' && (
+                <button onClick={() => setMultiCitySegments(multiCitySegments + 1)}
+                disabled={multiCitySegments >= 3}
+                >
                     Add flight
                 </button>
             )}
