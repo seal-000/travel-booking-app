@@ -14,9 +14,11 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
     );
 
     const handleDepartureChange = (index: number, airport: Airport) => {
+        console.log(`Departure changed at index ${index}:`, airport);
         const newDepartures = [...departures];
         newDepartures[index] = airport;
         setDepartures(newDepartures);
+        console.log('Updated departures array:', newDepartures);
     };
 
     // Function to handle removing a segment
@@ -30,10 +32,13 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
 
     // Sync departures array when segmentCount increases (adding rows)
     useEffect(() => {
+        console.log('Segment count changed to:', segmentCount);
         setDepartures(prev => {
             if (prev.length < segmentCount) {
                 // Add null entries for new rows
-                return [...prev, ...Array(segmentCount - prev.length).fill(null)];
+                const newArray = [...prev, ...Array(segmentCount - prev.length).fill(null)];
+                console.log('Departures array expanded:', newArray);
+                return newArray;
             }
             return prev;
         });
@@ -44,7 +49,10 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
             <>
                 {Array.from({ length: segmentCount }, (_, index) => (
                     <div className="trip-options-row" key={index}>
-                        <DepartureLocation />
+                        <DepartureLocation 
+                            selectedAirport={departures[index]}
+                            onAirportSelect={(airport) => handleDepartureChange(index, airport)}
+                        />
                         <button
                             onClick={() => handleRemoveSegment(index)}
                             //can't remove if only 2 segments left
@@ -62,7 +70,10 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
 
     return (
         <div className="trip-options-row">
-            <DepartureLocation />
+            <DepartureLocation 
+                selectedAirport={departures[0]}
+                onAirportSelect={(airport) => handleDepartureChange(0, airport)}
+            />
         </div>
         
         

@@ -1,6 +1,6 @@
 
 .departure-location-paper {
-  background-color: #69bc54 !important;
+  background-color: #e5efe3 !important;
   margin-top: 1rem
 }
 
@@ -10,7 +10,7 @@
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-bottom: 8px solid #69bc54;
+  border-bottom: 8px solid #e5efe3;
   top: -8px;
   left: 20px;
 }
