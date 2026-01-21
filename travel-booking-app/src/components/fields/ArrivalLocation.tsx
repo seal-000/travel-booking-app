@@ -3,17 +3,17 @@ import type { Airport } from '../../services/airportService';
 import { searchAirports } from '../../services/airportService';
 import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlaneDeparture } from '@fortawesome/free-solid-svg-icons';
+import { faPlaneArrival } from '@fortawesome/free-solid-svg-icons';
 
 import { Button, Popper, Fade, Paper, Typography, ClickAwayListener, TextField, List, ListItem, ListItemButton, ListItemText, Chip } from '@mui/material';
 import './Location.css';
 
-interface DepartureLocationProps {
+interface ArrivalLocationProps {
   onAirportSelect?: (airport: Airport) => void;
   selectedAirport?: Airport | null;
 }
 
-const DepartureLocation: React.FC<DepartureLocationProps> = ({ onAirportSelect, selectedAirport }) => {
+const ArrivalLocation: React.FC<ArrivalLocationProps> = ({ onAirportSelect, selectedAirport }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Airport[]>([]);
 
@@ -26,11 +26,11 @@ const DepartureLocation: React.FC<DepartureLocationProps> = ({ onAirportSelect, 
     }
     const results = await searchAirports(query);
     setSearchResults(results);
-    console.log('Departure airport search results:', results);
+    console.log('Arrival airport search results:', results);
   };
 
   const handleAirportSelect = (airport: Airport, popupState: any) => {
-    console.log('Departure Airport selected:', airport);
+    console.log('Arrival airport selected:', airport);
     onAirportSelect?.(airport);
     setSearchQuery('');
     setSearchResults([]);
@@ -38,17 +38,17 @@ const DepartureLocation: React.FC<DepartureLocationProps> = ({ onAirportSelect, 
   };
 
   const handleDelete = () => {
-    console.log('Clearing selected departure airport');
+    console.log('Clearing selected arrival airport');
     onAirportSelect?.(null as any);
   };
 
   return (
-      <PopupState variant="popper" popupId="departure-popup-popper">
+      <PopupState variant="popper" popupId="arrival-popup-popper">
       {(popupState) => (
         <div>
           <Button variant="contained" className='location-button' {...bindToggle(popupState)}>
-            <FontAwesomeIcon icon={faPlaneDeparture} />
-            {selectedAirport ? `${selectedAirport.code} - ${selectedAirport.city}` : 'Leaving from'}
+            <FontAwesomeIcon icon={faPlaneArrival} />
+            {selectedAirport ? `${selectedAirport.code} - ${selectedAirport.city}` : 'Going to'}
           </Button>
           <Popper {...bindPopper(popupState)} placement="bottom-start" transition>
             {({ TransitionProps }) => (
@@ -105,4 +105,4 @@ const DepartureLocation: React.FC<DepartureLocationProps> = ({ onAirportSelect, 
   );
 };
 
-export default DepartureLocation;
+export default ArrivalLocation;

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { Airport } from '../../services/airportService';
 import DepartureLocation from '../fields/DepartureLocation';
+import ArrivalLocation from '../fields/ArrivalLocation';
+import SwapButton from '../fields/SwapButton';
 
 interface TripRouteAndDateRowProps {
     tripType: string;
@@ -12,6 +14,9 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
     const [departures, setDepartures] = useState<(Airport | null)[]>(
         Array(segmentCount).fill(null)
     );
+    const [arrivals, setArrivals] = useState<(Airport | null)[]>(
+        Array(segmentCount).fill(null)
+    );
 
     const handleDepartureChange = (index: number, airport: Airport) => {
         console.log(`Departure changed at index ${index}:`, airport);
@@ -21,23 +26,50 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
         console.log('Updated departures array:', newDepartures);
     };
 
+    const handleArrivalChange = (index: number, airport: Airport) => {
+        console.log(`Arrival changed at index ${index}:`, airport);
+        const newArrivals = [...arrivals];
+        newArrivals[index] = airport;
+        setArrivals(newArrivals);
+        console.log('Updated arrivals array:', newArrivals);
+    };
+
+    const handleSwap = (index: number) => {
+        console.log(`Swapping departure and arrival at index ${index}`);
+        const newDepartures = [...departures];
+        const newArrivals = [...arrivals];
+        [newDepartures[index], newArrivals[index]] = [newArrivals[index], newDepartures[index]];
+        setDepartures(newDepartures);
+        setArrivals(newArrivals);
+        console.log('Swapped - Departures:', newDepartures, 'Arrivals:', newArrivals);
+    };
+
     // Function to handle removing a segment
     const handleRemoveSegment = (index: number) => {
         if (segmentCount > 2) {
             const newDepartures = departures.filter((_, i) => i !== index);
+            const newArrivals = arrivals.filter((_, i) => i !== index);
             setDepartures(newDepartures);
+            setArrivals(newArrivals);
             onSegmentCountChange?.(segmentCount - 1);
         }
     };
 
-    // Sync departures array when segmentCount increases (adding rows)
+    // Sync arrays when segmentCount increases (adding rows)
     useEffect(() => {
         console.log('Segment count changed to:', segmentCount);
         setDepartures(prev => {
             if (prev.length < segmentCount) {
-                // Add null entries for new rows
                 const newArray = [...prev, ...Array(segmentCount - prev.length).fill(null)];
                 console.log('Departures array expanded:', newArray);
+                return newArray;
+            }
+            return prev;
+        });
+        setArrivals(prev => {
+            if (prev.length < segmentCount) {
+                const newArray = [...prev, ...Array(segmentCount - prev.length).fill(null)];
+                console.log('Arrivals array expanded:', newArray);
                 return newArray;
             }
             return prev;
@@ -52,6 +84,11 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
                         <DepartureLocation 
                             selectedAirport={departures[index]}
                             onAirportSelect={(airport) => handleDepartureChange(index, airport)}
+                        />
+                        <SwapButton onSwap={() => handleSwap(index)} />
+                        <ArrivalLocation 
+                            selectedAirport={arrivals[index]}
+                            onAirportSelect={(airport) => handleArrivalChange(index, airport)}
                         />
                         <button
                             onClick={() => handleRemoveSegment(index)}
@@ -74,9 +111,12 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
                 selectedAirport={departures[0]}
                 onAirportSelect={(airport) => handleDepartureChange(0, airport)}
             />
+            <SwapButton onSwap={() => handleSwap(0)} />
+            <ArrivalLocation 
+                selectedAirport={arrivals[0]}
+                onAirportSelect={(airport) => handleArrivalChange(0, airport)}
+            />
         </div>
-        
-        
     );
 };
 
