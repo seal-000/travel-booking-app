@@ -12,7 +12,7 @@ interface DateRangePickerComponentProps {
 
 const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({
   onDateRangeChange,
-  label = 'Select Date Range',
+  label = 'Travel Dates',
   disabled = false,
 }) => {
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
@@ -34,6 +34,7 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({
         value={dateRange}
         onChange={handleDateRangeChange}
         disabled={disabled}
+        minDate={dayjs()}
         slotProps={{
           textField: {
             size: 'small',

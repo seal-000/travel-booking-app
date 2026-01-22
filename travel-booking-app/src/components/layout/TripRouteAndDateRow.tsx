@@ -3,6 +3,8 @@ import type { Airport } from '../../services/airportService';
 import DepartureLocation from '../fields/DepartureLocation';
 import ArrivalLocation from '../fields/ArrivalLocation';
 import SwapButton from '../fields/SwapButton';
+import DateRangePickerComponent from '../fields/DateRangePicker';
+import DatePickerComponent from '../fields/DatePicker';
 
 interface TripRouteAndDateRowProps {
     tripType: string;
@@ -90,6 +92,7 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
                             selectedAirport={arrivals[index]}
                             onAirportSelect={(airport) => handleArrivalChange(index, airport)}
                         />
+                        <DatePickerComponent />
                         <button
                             onClick={() => handleRemoveSegment(index)}
                             //can't remove if only 2 segments left
@@ -116,6 +119,12 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
                 selectedAirport={arrivals[0]}
                 onAirportSelect={(airport) => handleArrivalChange(0, airport)}
             />
+            {tripType === 'roundtrip' && (
+                <DateRangePickerComponent />
+            )}
+            {tripType === 'oneway' && (
+                <DatePickerComponent/>
+            )}
         </div>
     );
 };
