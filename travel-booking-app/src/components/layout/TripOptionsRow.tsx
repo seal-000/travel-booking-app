@@ -3,6 +3,7 @@ import './Trip.css';
 import TripTypeRadioGroup from '../fields/TripTypeRadioGroup';
 import FormControlMenu from '../fields/FormControlMenu';
 import FormControlLabel from '../fields/FormControlLabel';
+import GuestSelector from '../fields/GuestSelector';
 
 interface TripOptionsRowProps {
   tripType: string;
@@ -11,9 +12,11 @@ interface TripOptionsRowProps {
   onCabinClassChange: (value: string) => void;
   directFlightsOnly: boolean;
   onDirectFlightsChange: (checked: boolean) => void;
+  guests?: { adults: number; children: number };
+  onGuestUpdate?: (guests: { adults: number; children: number }) => void;
 }
 
-const TripOptionsRow: React.FC<TripOptionsRowProps> = ({ tripType, onTripTypeChange, cabinClass, onCabinClassChange, directFlightsOnly, onDirectFlightsChange }) => {
+const TripOptionsRow: React.FC<TripOptionsRowProps> = ({ tripType, onTripTypeChange, cabinClass, onCabinClassChange, directFlightsOnly, onDirectFlightsChange, guests = { adults: 1, children: 0 }, onGuestUpdate }) => {
     
     const tripOptions = [
         { label: 'Round Trip', value: 'roundtrip' },
@@ -27,6 +30,7 @@ const TripOptionsRow: React.FC<TripOptionsRowProps> = ({ tripType, onTripTypeCha
         { label: 'Business', value: 'business' },
         { label: 'First Class', value: 'firstclass' },
     ];
+
     
     
     return (
@@ -46,6 +50,12 @@ const TripOptionsRow: React.FC<TripOptionsRowProps> = ({ tripType, onTripTypeCha
                 checked={directFlightsOnly}
                 onChange={onDirectFlightsChange}
                 />
+            )}
+            {tripType === 'multicity' && (
+            <GuestSelector 
+                guests={guests}
+                onGuestUpdate={onGuestUpdate}
+            />
             )}
             </div>
         </div>

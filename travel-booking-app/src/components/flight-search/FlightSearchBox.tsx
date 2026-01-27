@@ -10,6 +10,7 @@ const FlightSearchBox = () => {
     const [cabinClass, setCabinClass] = useState('economy');
     const [directFlightsOnly, setDirectFlightsOnly] = useState(false);
     const [multiCitySegments, setMultiCitySegments] = useState(2);
+    const [guests, setGuests] = useState({ adults: 1, children: 0 });
     
     const getTripTypeLabel = () => {
     if (tripType === 'roundtrip') return 'Round Trip';
@@ -30,11 +31,15 @@ const FlightSearchBox = () => {
                 onCabinClassChange={setCabinClass}
                 directFlightsOnly={directFlightsOnly}
                 onDirectFlightsChange={setDirectFlightsOnly}
+                guests={guests}
+                onGuestUpdate={setGuests}
             />
             <TripRouteAndDateRow 
                 tripType={tripType}
                 segmentCount={multiCitySegments}
                 onSegmentCountChange={setMultiCitySegments}
+                guests={guests}
+                onGuestUpdate={setGuests}
             />
           
             <Box>

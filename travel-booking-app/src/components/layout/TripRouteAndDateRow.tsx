@@ -5,14 +5,17 @@ import ArrivalLocation from '../fields/ArrivalLocation';
 import SwapButton from '../fields/SwapButton';
 import DateRangePickerComponent from '../fields/DateRangePicker';
 import DatePickerComponent from '../fields/DatePicker';
+import GuestSelector from '../fields/GuestSelector';
 
 interface TripRouteAndDateRowProps {
     tripType: string;
     segmentCount: number;
     onSegmentCountChange?: (newCount: number) => void;
+    guests?: { adults: number; children: number };
+    onGuestUpdate?: (guests: { adults: number; children: number }) => void;
 }
 
-const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: TripRouteAndDateRowProps) => {
+const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange, guests = { adults: 1, children: 0 }, onGuestUpdate }: TripRouteAndDateRowProps) => {
     const [departures, setDepartures] = useState<(Airport | null)[]>(
         Array(segmentCount).fill(null)
     );
@@ -125,6 +128,13 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange }: T
             {tripType === 'oneway' && (
                 <DatePickerComponent/>
             )}
+            {(tripType === 'roundtrip' || tripType === 'oneway') && (
+            <GuestSelector 
+                guests={guests}
+                onGuestUpdate={onGuestUpdate}
+            />
+            )}
+            
         </div>
     );
 };
