@@ -71,3 +71,32 @@ export default defineConfig([
   },
 ])
 ```
+
+
+``` mermaid
+
+  ---
+config:
+  theme: redux
+  layout: dagre
+  look: neo
+---
+flowchart TB
+    A(["Home"]) --> B(["Select guest, travel type, location and date"])
+    B --> C{"Is the destination available?"}
+    C -- Yes --> D{"Are there direct flights only?"}
+    D -- No --> SUG(["Give suggestions for non-direct flights"])
+    C -- No --> NA(["Not available"])
+    SUG --> n1["API"]
+    D -- Yes --> n1
+
+    style A fill:#FFF9C4
+    style B fill:#FFF9C4
+    style C fill:#FFF9C4
+    style D fill:#FFF9C4
+    style SUG fill:#FFF9C4
+    style NA fill:#FFF9C4
+    style n1 fill:#FFF9C4
+
+
+```

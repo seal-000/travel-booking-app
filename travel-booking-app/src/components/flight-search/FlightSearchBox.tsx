@@ -23,7 +23,9 @@ const FlightSearchBox = () => {
 
 
         <Box className="flight-search-box">
-            <p>{getTripTypeLabel()}</p>
+            
+            {/*<p>{getTripTypeLabel()}</p>}*/}
+
             <TripOptionsRow 
                 tripType={tripType} 
                 onTripTypeChange={setTripType}
