@@ -4,9 +4,10 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;         /* default for xs */
-  align-items: stretch;           /* default for xs */
-  justify-content: space-between;
-  gap: 0.5rem;                    /* gap: 2 means 2 * 0.25rem (usually), so 0.5rem */
+  /*align-items: stretch;  */         /* default for xs */
+  align-items: center;
+  justify-content: center;
+  gap: 2.8rem;                   
   color: #000;
 
 }
