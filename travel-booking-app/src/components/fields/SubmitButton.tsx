@@ -20,7 +20,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
             disabled={disabled}
             className="submit-button"
         >
-            {label}
+            {label} 
         </button>
     );
 };
