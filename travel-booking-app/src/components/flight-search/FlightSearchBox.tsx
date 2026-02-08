@@ -4,6 +4,7 @@ import TripOptionsRow from '../layout/TripOptionsRow';
 import { useState } from 'react';
 import TripRouteAndDateRow from '../layout/TripRouteAndDateRow';
 import type { Airport } from '../../services/airportService';
+import type { Dayjs } from 'dayjs';
 
 const FlightSearchBox = () => {
 
@@ -26,14 +27,19 @@ const FlightSearchBox = () => {
     const [departure, setDeparture] = useState<Airport | null>(null);
     const [arrival, setArrival] = useState<Airport | null>(null);
 
-    // For multi-city: array of segments with departure/arrival
-    const [multiCityRoutes, setMultiCityRoutes] = useState<Array<{ departure: Airport | null; arrival: Airport | null }>>([
-        { departure: null, arrival: null },
-        { departure: null, arrival: null },
-        { departure: null, arrival: null }
-    ]);
+    // For one-way and roundtrip: dates
+    const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
+    const [returnDate, setReturnDate] = useState<Dayjs | null>(null); // only used for roundtrip
 
-    
+    // For multi-city: array of segments with departure/arrival/date
+    const [multiCityRoutes, setMultiCityRoutes] = useState<Array<{ departure: Airport | null; arrival: Airport | null; date: Dayjs | null }>>([
+        { departure: null, arrival: null, date: null },
+        { departure: null, arrival: null, date: null },
+        { departure: null, arrival: null, date: null }
+    ]);
+    console.log(departure, arrival);
+    console.log(departureDate, returnDate);
+    console.log(multiCityRoutes);
     
     const getTripTypeLabel = () => {
     if (tripType === 'roundtrip') return 'Round Trip';
@@ -69,6 +75,10 @@ const FlightSearchBox = () => {
                 arrival={arrival}
                 onDepartureChange={setDeparture}
                 onArrivalChange={setArrival}
+                departureDate={departureDate}
+                returnDate={returnDate}
+                onDepartureDateChange={setDepartureDate}
+                onReturnDateChange={setReturnDate}
                 multiCityRoutes={multiCityRoutes}
                 onMultiCityRoutesChange={setMultiCityRoutes}
             />

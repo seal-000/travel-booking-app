@@ -1,5 +1,5 @@
-import { } from 'react';
 import type { Airport } from '../../services/airportService';
+import type { Dayjs } from 'dayjs';
 import DepartureLocation from '../fields/DepartureLocation';
 import ArrivalLocation from '../fields/ArrivalLocation';
 import SwapButton from '../fields/SwapButton';
@@ -18,9 +18,14 @@ interface TripRouteAndDateRowProps {
     arrival: Airport | null;
     onDepartureChange: (airport: Airport | null) => void;
     onArrivalChange: (airport: Airport | null) => void;
+    // For one-way and roundtrip dates
+    departureDate: Dayjs | null;
+    returnDate: Dayjs | null; // only used for roundtrip
+    onDepartureDateChange: (date: Dayjs | null) => void;
+    onReturnDateChange: (date: Dayjs | null) => void;
     // For multi-city
-    multiCityRoutes: Array<{ departure: Airport | null; arrival: Airport | null }>;
-    onMultiCityRoutesChange: (routes: Array<{ departure: Airport | null; arrival: Airport | null }>) => void;
+    multiCityRoutes: Array<{ departure: Airport | null; arrival: Airport | null; date: Dayjs | null }>;
+    onMultiCityRoutesChange: (routes: Array<{ departure: Airport | null; arrival: Airport | null; date: Dayjs | null }>) => void;
 }
 
 const TripRouteAndDateRow = ({ 
@@ -33,6 +38,10 @@ const TripRouteAndDateRow = ({
     arrival,
     onDepartureChange,
     onArrivalChange,
+    departureDate,
+    returnDate,
+    onDepartureDateChange,
+    onReturnDateChange,
     multiCityRoutes,
     onMultiCityRoutesChange
 }: TripRouteAndDateRowProps) => {
@@ -51,11 +60,19 @@ const TripRouteAndDateRow = ({
         onMultiCityRoutesChange(newRoutes);
     };
 
+    const handleMultiCityDateChange = (index: number, date: Dayjs | null) => {
+        console.log(`Date changed at index ${index}:`, date);
+        const newRoutes = [...multiCityRoutes];
+        newRoutes[index] = { ...newRoutes[index], date: date };
+        onMultiCityRoutesChange(newRoutes);
+    };
+
     const handleSwap = (index: number) => {
         if (tripType === 'multicity') {
             console.log(`Swapping departure and arrival at index ${index}`);
             const newRoutes = [...multiCityRoutes];
             newRoutes[index] = { 
+                ...newRoutes[index],
                 departure: newRoutes[index].arrival, 
                 arrival: newRoutes[index].departure 
             };
@@ -91,7 +108,9 @@ const TripRouteAndDateRow = ({
                             selectedAirport={multiCityRoutes[index]?.arrival ?? null}
                             onAirportSelect={(airport) => handleMultiCityArrivalChange(index, airport)}
                         />
-                        <DatePickerComponent />
+                        <DatePickerComponent 
+                            onDateChange={(date) => handleMultiCityDateChange(index, date)}
+                        />
                         <button
                             onClick={() => handleRemoveSegment(index)}
                             //can't remove if only 2 segments left
@@ -119,10 +138,17 @@ const TripRouteAndDateRow = ({
                 onAirportSelect={(airport) => onArrivalChange(airport)}
             />
             {tripType === 'roundtrip' && (
-                <DateRangePickerComponent />
+                <DateRangePickerComponent 
+                    onDateRangeChange={(start, end) => {
+                        onDepartureDateChange(start);
+                        onReturnDateChange(end);
+                    }}
+                />
             )}
             {tripType === 'oneway' && (
-                <DatePickerComponent/>
+                <DatePickerComponent 
+                    onDateChange={onDepartureDateChange}
+                />
             )}
             {(tripType === 'roundtrip' || tripType === 'oneway') && (
             <GuestSelector 
