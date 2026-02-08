@@ -3,14 +3,37 @@ import './FlightSearchBox.css';
 import TripOptionsRow from '../layout/TripOptionsRow';
 import { useState } from 'react';
 import TripRouteAndDateRow from '../layout/TripRouteAndDateRow';
+import type { Airport } from '../../services/airportService';
 
 const FlightSearchBox = () => {
 
+    // For trip type, we can use 'oneway', 'roundtrip', 'multicity'
     const [tripType, setTripType] = useState('oneway');
+
+    // For cabin class, we can use 'economy', 'premium_economy', 'business', 'first'
     const [cabinClass, setCabinClass] = useState('economy');
+
+    // For direct flights only filter
     const [directFlightsOnly, setDirectFlightsOnly] = useState(false);
+
+    // For multi-city, we can have up to 3 segments (2 for departure/arrival pairs)
     const [multiCitySegments, setMultiCitySegments] = useState(2);
+
+    // For guests, we can have adults and children counts
     const [guests, setGuests] = useState({ adults: 1, children: 0 });
+
+    // For one-way and roundtrip: single departure/arrival
+    const [departure, setDeparture] = useState<Airport | null>(null);
+    const [arrival, setArrival] = useState<Airport | null>(null);
+
+    // For multi-city: array of segments with departure/arrival
+    const [multiCityRoutes, setMultiCityRoutes] = useState<Array<{ departure: Airport | null; arrival: Airport | null }>>([
+        { departure: null, arrival: null },
+        { departure: null, arrival: null },
+        { departure: null, arrival: null }
+    ]);
+
+    
     
     const getTripTypeLabel = () => {
     if (tripType === 'roundtrip') return 'Round Trip';
@@ -42,6 +65,12 @@ const FlightSearchBox = () => {
                 onSegmentCountChange={setMultiCitySegments}
                 guests={guests}
                 onGuestUpdate={setGuests}
+                departure={departure}
+                arrival={arrival}
+                onDepartureChange={setDeparture}
+                onArrivalChange={setArrival}
+                multiCityRoutes={multiCityRoutes}
+                onMultiCityRoutesChange={setMultiCityRoutes}
             />
           
             <Box>

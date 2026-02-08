@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { } from 'react';
 import type { Airport } from '../../services/airportService';
 import DepartureLocation from '../fields/DepartureLocation';
 import ArrivalLocation from '../fields/ArrivalLocation';
@@ -13,73 +13,69 @@ interface TripRouteAndDateRowProps {
     onSegmentCountChange?: (newCount: number) => void;
     guests?: { adults: number; children: number };
     onGuestUpdate?: (guests: { adults: number; children: number }) => void;
+    // For one-way and roundtrip
+    departure: Airport | null;
+    arrival: Airport | null;
+    onDepartureChange: (airport: Airport | null) => void;
+    onArrivalChange: (airport: Airport | null) => void;
+    // For multi-city
+    multiCityRoutes: Array<{ departure: Airport | null; arrival: Airport | null }>;
+    onMultiCityRoutesChange: (routes: Array<{ departure: Airport | null; arrival: Airport | null }>) => void;
 }
 
-const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange, guests = { adults: 1, children: 0 }, onGuestUpdate }: TripRouteAndDateRowProps) => {
-    const [departures, setDepartures] = useState<(Airport | null)[]>(
-        Array(segmentCount).fill(null)
-    );
-    const [arrivals, setArrivals] = useState<(Airport | null)[]>(
-        Array(segmentCount).fill(null)
-    );
+const TripRouteAndDateRow = ({ 
+    tripType, 
+    segmentCount, 
+    onSegmentCountChange, 
+    guests = { adults: 1, children: 0 }, 
+    onGuestUpdate,
+    departure,
+    arrival,
+    onDepartureChange,
+    onArrivalChange,
+    multiCityRoutes,
+    onMultiCityRoutesChange
+}: TripRouteAndDateRowProps) => {
 
-    const handleDepartureChange = (index: number, airport: Airport) => {
+    const handleMultiCityDepartureChange = (index: number, airport: Airport) => {
         console.log(`Departure changed at index ${index}:`, airport);
-        const newDepartures = [...departures];
-        newDepartures[index] = airport;
-        setDepartures(newDepartures);
-        console.log('Updated departures array:', newDepartures);
+        const newRoutes = [...multiCityRoutes];
+        newRoutes[index] = { ...newRoutes[index], departure: airport };
+        onMultiCityRoutesChange(newRoutes);
     };
 
-    const handleArrivalChange = (index: number, airport: Airport) => {
+    const handleMultiCityArrivalChange = (index: number, airport: Airport) => {
         console.log(`Arrival changed at index ${index}:`, airport);
-        const newArrivals = [...arrivals];
-        newArrivals[index] = airport;
-        setArrivals(newArrivals);
-        console.log('Updated arrivals array:', newArrivals);
+        const newRoutes = [...multiCityRoutes];
+        newRoutes[index] = { ...newRoutes[index], arrival: airport };
+        onMultiCityRoutesChange(newRoutes);
     };
 
     const handleSwap = (index: number) => {
-        console.log(`Swapping departure and arrival at index ${index}`);
-        const newDepartures = [...departures];
-        const newArrivals = [...arrivals];
-        [newDepartures[index], newArrivals[index]] = [newArrivals[index], newDepartures[index]];
-        setDepartures(newDepartures);
-        setArrivals(newArrivals);
-        console.log('Swapped - Departures:', newDepartures, 'Arrivals:', newArrivals);
+        if (tripType === 'multicity') {
+            console.log(`Swapping departure and arrival at index ${index}`);
+            const newRoutes = [...multiCityRoutes];
+            newRoutes[index] = { 
+                departure: newRoutes[index].arrival, 
+                arrival: newRoutes[index].departure 
+            };
+            onMultiCityRoutesChange(newRoutes);
+        } else {
+            // For one-way and roundtrip
+            const tempDeparture = departure;
+            onDepartureChange(arrival);
+            onArrivalChange(tempDeparture);
+        }
     };
 
     // Function to handle removing a segment
     const handleRemoveSegment = (index: number) => {
         if (segmentCount > 2) {
-            const newDepartures = departures.filter((_, i) => i !== index);
-            const newArrivals = arrivals.filter((_, i) => i !== index);
-            setDepartures(newDepartures);
-            setArrivals(newArrivals);
+            const newRoutes = multiCityRoutes.filter((_, i) => i !== index);
+            onMultiCityRoutesChange(newRoutes);
             onSegmentCountChange?.(segmentCount - 1);
         }
     };
-
-    // Sync arrays when segmentCount increases (adding rows)
-    useEffect(() => {
-        console.log('Segment count changed to:', segmentCount);
-        setDepartures(prev => {
-            if (prev.length < segmentCount) {
-                const newArray = [...prev, ...Array(segmentCount - prev.length).fill(null)];
-                console.log('Departures array expanded:', newArray);
-                return newArray;
-            }
-            return prev;
-        });
-        setArrivals(prev => {
-            if (prev.length < segmentCount) {
-                const newArray = [...prev, ...Array(segmentCount - prev.length).fill(null)];
-                console.log('Arrivals array expanded:', newArray);
-                return newArray;
-            }
-            return prev;
-        });
-    }, [segmentCount]);
 
     if (tripType === 'multicity') {
         return (
@@ -87,13 +83,13 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange, gue
                 {Array.from({ length: segmentCount }, (_, index) => (
                     <div className="trip-options-row" key={index}>
                         <DepartureLocation 
-                            selectedAirport={departures[index]}
-                            onAirportSelect={(airport) => handleDepartureChange(index, airport)}
+                            selectedAirport={multiCityRoutes[index]?.departure ?? null}
+                            onAirportSelect={(airport) => handleMultiCityDepartureChange(index, airport)}
                         />
                         <SwapButton onSwap={() => handleSwap(index)} />
                         <ArrivalLocation 
-                            selectedAirport={arrivals[index]}
-                            onAirportSelect={(airport) => handleArrivalChange(index, airport)}
+                            selectedAirport={multiCityRoutes[index]?.arrival ?? null}
+                            onAirportSelect={(airport) => handleMultiCityArrivalChange(index, airport)}
                         />
                         <DatePickerComponent />
                         <button
@@ -114,13 +110,13 @@ const TripRouteAndDateRow = ({ tripType, segmentCount, onSegmentCountChange, gue
     return (
         <div className="trip-options-row">
             <DepartureLocation 
-                selectedAirport={departures[0]}
-                onAirportSelect={(airport) => handleDepartureChange(0, airport)}
+                selectedAirport={departure}
+                onAirportSelect={(airport) => onDepartureChange(airport)}
             />
             <SwapButton onSwap={() => handleSwap(0)} />
             <ArrivalLocation 
-                selectedAirport={arrivals[0]}
-                onAirportSelect={(airport) => handleArrivalChange(0, airport)}
+                selectedAirport={arrival}
+                onAirportSelect={(airport) => onArrivalChange(airport)}
             />
             {tripType === 'roundtrip' && (
                 <DateRangePickerComponent />
