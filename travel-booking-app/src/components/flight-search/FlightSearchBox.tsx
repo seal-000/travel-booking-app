@@ -48,6 +48,27 @@ const FlightSearchBox = () => {
     if (tripType === 'multicity') return 'Multi-City';
     return 'Round Trip'; // default fallback
     };
+
+    const handleSearch = () => {
+        console.log('=== Flight Search Data ===');
+        console.log('Trip Type:', tripType);
+        console.log('Cabin Class:', cabinClass);
+        console.log('Direct Flights Only:', directFlightsOnly);
+        console.log('Guests:', guests);
+        
+        if (tripType === 'multicity') {
+            console.log('Multi-City Segments:', multiCitySegments);
+            console.log('Multi-City Routes:', multiCityRoutes);
+        } else {
+            console.log('Departure:', departure);
+            console.log('Arrival:', arrival);
+            console.log('Departure Date:', departureDate?.format('YYYY-MM-DD'));
+            if (tripType === 'roundtrip') {
+                console.log('Return Date:', returnDate?.format('YYYY-MM-DD'));
+            }
+        }
+        console.log('=========================');
+    };
     
     return (
 
@@ -97,8 +118,8 @@ const FlightSearchBox = () => {
 
             </Box>
 
-            <SubmitButton className="search-button" label="Search Flights" />
-
+            <SubmitButton className="search-button" label="Search Flights" onSubmit={handleSearch} />
+            {/*To-do: Implement search functionality - API URL*/}
         </Box>
     );
 
