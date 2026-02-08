@@ -12,10 +12,10 @@ interface DatePickerComponentProps {
 
 const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
   onDateChange,
-  label = 'Travel Date',
+  label = 'Select a date',
   disabled = false,
 }) => {
-  const [date, setDate] = useState<Dayjs | null>(dayjs());
+  const [date, setDate] = useState<Dayjs | null>(null);
 
   const handleDateChange = (newDate: Dayjs | null) => {
     setDate(newDate);

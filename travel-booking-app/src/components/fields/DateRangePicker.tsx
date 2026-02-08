@@ -6,18 +6,16 @@ import dayjs, { Dayjs } from 'dayjs';
 
 interface DateRangePickerComponentProps {
   onDateRangeChange?: (startDate: Dayjs | null, endDate: Dayjs | null) => void;
-  label?: string;
   disabled?: boolean;
 }
 
 const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({
   onDateRangeChange,
-  label = 'Travel Dates',
   disabled = false,
 }) => {
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
-    dayjs(),
-    dayjs().add(1, 'day'),
+    null,
+    null,
   ]);
 
   const handleDateRangeChange = (newDateRange: [Dayjs | null, Dayjs | null]) => {
@@ -30,7 +28,6 @@ const DateRangePickerComponent: React.FC<DateRangePickerComponentProps> = ({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateRangePicker
-        label={label}
         value={dateRange}
         onChange={handleDateRangeChange}
         disabled={disabled}
