@@ -5,6 +5,7 @@ import { useState } from 'react';
 import TripRouteAndDateRow from '../layout/TripRouteAndDateRow';
 import type { Airport } from '../../services/airportService';
 import type { Dayjs } from 'dayjs';
+import { SubmitButton } from '../fields/SubmitButton';
 
 const FlightSearchBox = () => {
 
@@ -95,6 +96,8 @@ const FlightSearchBox = () => {
 
 
             </Box>
+
+            <SubmitButton className="search-button" label="Search Flights" />
 
         </Box>
     );
