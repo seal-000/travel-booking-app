@@ -1,16 +1,19 @@
-import { Box } from '@mui/material';
+import { Box, Snackbar, Alert } from '@mui/material';
 import './FlightSearchBox.css';
 import TripOptionsRow from '../layout/TripOptionsRow';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TripRouteAndDateRow from '../layout/TripRouteAndDateRow';
 import type { Airport } from '../../services/airportService';
 import type { Dayjs } from 'dayjs';
 import { SubmitButton } from '../fields/SubmitButton';
 
 const FlightSearchBox = () => {
+    const navigate = useNavigate();
 
     // For trip type, we can use 'oneway', 'roundtrip', 'multicity'
     const [tripType, setTripType] = useState('oneway');
+    const [showError, setShowError] = useState(false);
 
     // For cabin class, we can use 'economy', 'premium_economy', 'business', 'first'
     const [cabinClass, setCabinClass] = useState('economy');
@@ -50,6 +53,21 @@ const FlightSearchBox = () => {
     };
 
     const handleSearch = () => {
+        // Validate required fields
+        if (tripType === 'multicity') {
+            for (let i = 0; i < multiCitySegments; i++) {
+                if (!multiCityRoutes[i].departure || !multiCityRoutes[i].arrival || !multiCityRoutes[i].date) {
+                    setShowError(true);
+                    return;
+                }
+            }
+        } else {
+            if (!departure || !arrival || !departureDate || (tripType === 'roundtrip' && !returnDate)) {
+                setShowError(true);
+                return;
+            }
+        }
+
         console.log('=== Flight Search Data ===');
         console.log('Trip Type:', tripType);
         console.log('Cabin Class:', cabinClass);
@@ -68,6 +86,32 @@ const FlightSearchBox = () => {
             }
         }
         console.log('=========================');
+
+        // Build search params and navigate to search results
+        const searchParams = new URLSearchParams();
+        searchParams.set('tripType', tripType);
+        searchParams.set('cabinClass', cabinClass);
+        searchParams.set('directFlightsOnly', String(directFlightsOnly));
+        searchParams.set('adults', String(guests.adults));
+        searchParams.set('children', String(guests.children));
+
+        if (tripType === 'multicity') {
+            searchParams.set('segments', multiCitySegments.toString());
+            for (let i = 0; i < multiCitySegments; i++) {
+                searchParams.set(`departure${i}`, multiCityRoutes[i].departure?.code || '');
+                searchParams.set(`arrival${i}`, multiCityRoutes[i].arrival?.code || '');
+                searchParams.set(`date${i}`, multiCityRoutes[i].date?.format('YYYY-MM-DD') || '');
+            }
+        } else {
+            searchParams.set('departure', departure?.code || '');
+            searchParams.set('arrival', arrival?.code || '');
+            searchParams.set('departureDate', departureDate?.format('YYYY-MM-DD') || '');
+            if (tripType === 'roundtrip' && returnDate) {
+                searchParams.set('returnDate', returnDate.format('YYYY-MM-DD'));
+            }
+        }
+
+        navigate(`/flights?${searchParams.toString()}`);
     };
     
     return (
@@ -120,6 +164,15 @@ const FlightSearchBox = () => {
 
             <SubmitButton className="search-button" label="Search Flights" onSubmit={handleSearch} />
             {/*To-do: Implement search functionality - API URL*/}
+
+            <Snackbar
+                open={showError}
+                autoHideDuration={3000}
+                onClose={() => setShowError(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert severity="error" onClose={() => setShowError(false)}>One of the values is not completed</Alert>
+            </Snackbar>
         </Box>
     );
 

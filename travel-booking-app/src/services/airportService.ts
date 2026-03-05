@@ -1,4 +1,4 @@
-// Mock airport data - replace with Amadeus API later
+
 import axios from 'axios';
 
 export interface Airport {
