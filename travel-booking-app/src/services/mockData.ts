@@ -2,6 +2,13 @@
 // Types
 export type TripType = 'one-way' | 'round-trip' | 'multi-city';
 
+
+export interface Baggage {
+  personalItem: boolean;
+  carryOn: boolean;
+  checkedBag: boolean;
+}
+
 export interface Flight {
   id: string;
   tripType: TripType;
@@ -12,7 +19,7 @@ export interface Flight {
   isBest?: boolean;
   isFastest?: boolean;
   dealType?: string;
-  baggageIncluded: boolean;
+  baggage: Baggage;
 }
 
 export interface FlightSegment {
@@ -29,14 +36,14 @@ export interface FlightSegment {
 
 // Use to map name filter of airline in search form to logo in flight card
 export const AIRLINES = [
-  { name: 'Air France', logo: 'https://logo.clearbit.com/airfrance.com' },
-  { name: 'United Airlines', logo: 'https://logo.clearbit.com/united.com' },
-  { name: 'Turkish Airlines', logo: 'https://logo.clearbit.com/turkishairlines.com' },
-  { name: 'Icelandair', logo: 'https://logo.clearbit.com/icelandair.com' },
-  { name: 'French Bee', logo: 'https://logo.clearbit.com/frenchbee.com' },
-  { name: 'Ryanair', logo: 'https://logo.clearbit.com/ryanair.com' },
-  { name: 'Lufthansa', logo: 'https://logo.clearbit.com/lufthansa.com' },
-  { name: 'British Airways', logo: 'https://logo.clearbit.com/britishairways.com' },
+  { name: 'Air France' },
+  { name: 'United Airlines' },
+  { name: 'Turkish Airlines' },
+  { name: 'Icelandair' },
+  { name: 'French Bee' },
+  { name: 'Ryanair' },
+  { name: 'Lufthansa'},
+  { name: 'British Airways' },
 ];
 
 export const MOCK_FLIGHTS: Flight[] = [
@@ -47,7 +54,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Air France',
-        airlineLogo: 'https://logo.clearbit.com/airfrance.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/air-france.png',
         departureTime: '8:45 PM',
         departureAirport: 'LGA',
         arrivalTime: '9:35 AM',
@@ -58,7 +65,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'Air France',
-        airlineLogo: 'https://logo.clearbit.com/airfrance.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/air-france.png',
         departureTime: '5:50 AM',
         departureAirport: 'CDG',
         arrivalTime: '9:26 AM',
@@ -72,7 +79,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     originalPrice: 838,
     isCheapest: true,
     dealType: 'Spring Deal',
-    baggageIncluded: true,
+    baggage: { personalItem: true, carryOn: true, checkedBag: true },
   },
   {
     id: '2',
@@ -80,7 +87,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'United Airlines',
-        airlineLogo: 'https://logo.clearbit.com/united.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/united-airlines.png',
         departureTime: '10:15 AM',
         departureAirport: 'EWR',
         arrivalTime: '11:30 PM',
@@ -91,7 +98,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'United Airlines',
-        airlineLogo: 'https://logo.clearbit.com/united.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/united-airlines.png',
         departureTime: '9:00 AM',
         departureAirport: 'LHR',
         arrivalTime: '12:30 PM',
@@ -103,7 +110,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     ],
     price: 992,
     isBest: true,
-    baggageIncluded: true,
+    baggage: { personalItem: true, carryOn: true, checkedBag: true },
   },
   {
     id: '3',
@@ -111,7 +118,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Turkish Airlines',
-        airlineLogo: 'https://logo.clearbit.com/turkishairlines.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/turkish-airlines.png',
         departureTime: '6:30 PM',
         departureAirport: 'JFK',
         arrivalTime: '12:45 PM',
@@ -122,7 +129,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'Turkish Airlines',
-        airlineLogo: 'https://logo.clearbit.com/turkishairlines.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/turkish-airlines.png',
         departureTime: '2:00 PM',
         departureAirport: 'IST',
         arrivalTime: '6:30 PM',
@@ -135,7 +142,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     price: 860,
     originalPrice: 910,
     dealType: 'Spring Deal',
-    baggageIncluded: false,
+    baggage: { personalItem: true, carryOn: true, checkedBag: false },
   },
 
   // ONE-WAY FLIGHTS (1 segment)
@@ -145,7 +152,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'French Bee',
-        airlineLogo: 'https://logo.clearbit.com/frenchbee.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/french-bee.png',
         departureTime: '11:55 PM',
         departureAirport: 'EWR',
         arrivalTime: '1:20 PM',
@@ -157,7 +164,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     ],
     price: 745,
     isFastest: true,
-    baggageIncluded: false,
+    baggage: { personalItem: true, carryOn: false, checkedBag: false },
   },
   {
     id: '5',
@@ -165,7 +172,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Icelandair',
-        airlineLogo: 'https://logo.clearbit.com/icelandair.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/icelandair.png',
         departureTime: '8:00 PM',
         departureAirport: 'JFK',
         arrivalTime: '6:15 AM',
@@ -176,7 +183,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
     ],
     price: 890,
-    baggageIncluded: true,
+    baggage: { personalItem: true, carryOn: true, checkedBag: true },
   },
   {
     id: '6',
@@ -184,7 +191,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Lufthansa',
-        airlineLogo: 'https://logo.clearbit.com/lufthansa.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/lufthansa.png',
         departureTime: '4:20 PM',
         departureAirport: 'JFK',
         arrivalTime: '5:50 AM',
@@ -195,7 +202,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
     ],
     price: 1050,
-    baggageIncluded: true,
+    baggage: { personalItem: true, carryOn: true, checkedBag: true },
   },
   {
     id: '7',
@@ -203,7 +210,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'British Airways',
-        airlineLogo: 'https://logo.clearbit.com/britishairways.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/british-airways.png',
         departureTime: '7:30 PM',
         departureAirport: 'JFK',
         arrivalTime: '7:20 AM',
@@ -214,7 +221,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
     ],
     price: 1120,
-    baggageIncluded: true,
+    baggage: { personalItem: true, carryOn: true, checkedBag: false },
   },
 
   // MULTI-CITY FLIGHTS (3+ segments)
@@ -224,7 +231,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Air France',
-        airlineLogo: 'https://logo.clearbit.com/airfrance.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/air-france.png',
         departureTime: '6:00 PM',
         departureAirport: 'JFK',
         arrivalTime: '7:30 AM',
@@ -235,7 +242,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'Lufthansa',
-        airlineLogo: 'https://logo.clearbit.com/lufthansa.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/lufthansa.png',
         departureTime: '10:00 AM',
         departureAirport: 'CDG',
         arrivalTime: '11:30 AM',
@@ -246,7 +253,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'United Airlines',
-        airlineLogo: 'https://logo.clearbit.com/united.com',
+        airlineLogo: 'https://airhex.com/images/airline-logos/united-airlines.png',
         departureTime: '1:00 PM',
         departureAirport: 'FRA',
         arrivalTime: '4:30 PM',
@@ -259,60 +266,6 @@ export const MOCK_FLIGHTS: Flight[] = [
     price: 1850,
     originalPrice: 2100,
     dealType: 'Multi-City Deal',
-    baggageIncluded: true,
-  },
-  {
-    id: '9',
-    tripType: 'multi-city',
-    segments: [
-      {
-        airline: 'British Airways',
-        airlineLogo: 'https://logo.clearbit.com/britishairways.com',
-        departureTime: '8:00 PM',
-        departureAirport: 'JFK',
-        arrivalTime: '8:00 AM',
-        arrivalAirport: 'LHR',
-        duration: '7h 00m',
-        stops: 0,
-        date: 'May 1',
-      },
-      {
-        airline: 'Ryanair',
-        airlineLogo: 'https://logo.clearbit.com/ryanair.com',
-        departureTime: '6:30 AM',
-        departureAirport: 'STN',
-        arrivalTime: '9:45 AM',
-        arrivalAirport: 'BCN',
-        duration: '2h 15m',
-        stops: 0,
-        date: 'May 5',
-      },
-      {
-        airline: 'Turkish Airlines',
-        airlineLogo: 'https://logo.clearbit.com/turkishairlines.com',
-        departureTime: '11:00 AM',
-        departureAirport: 'BCN',
-        arrivalTime: '5:30 PM',
-        arrivalAirport: 'IST',
-        duration: '3h 30m',
-        stops: 0,
-        date: 'May 10',
-      },
-      {
-        airline: 'Turkish Airlines',
-        airlineLogo: 'https://logo.clearbit.com/turkishairlines.com',
-        departureTime: '10:00 PM',
-        departureAirport: 'IST',
-        arrivalTime: '2:30 AM',
-        arrivalAirport: 'JFK',
-        duration: '11h 30m',
-        stops: 0,
-        date: 'May 15',
-      },
-    ],
-    price: 2340,
-    originalPrice: 2800,
-    dealType: 'Europe Explorer',
-    baggageIncluded: true,
-  },
+    baggage: { personalItem: true, carryOn: true, checkedBag: true },
+  }
 ];
