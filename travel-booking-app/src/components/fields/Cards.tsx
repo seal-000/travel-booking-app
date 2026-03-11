@@ -278,14 +278,18 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
           {/* Price & Action Column */}
           <Box
             sx={{
-              minWidth: 150,
+              minWidth: 180,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-end',
               justifyContent: 'space-between',
+              borderLeft: '1px solid #e0e0e0',
+              pl: 3,
+              ml: 2,
             }}
           >
-            <Box sx={{ textAlign: 'right' }}>
+            {/* Price Section */}
+            <Box sx={{ textAlign: 'right', mb: 2 }}>
               {flight.originalPrice && (
                 <Typography
                   variant="body2"
@@ -305,80 +309,41 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
               </Typography>
             </Box>
 
-            <Button
-              variant="contained"
-              sx={{
-                mt: 2,
-                bgcolor: '#0071c2',
-                '&:hover': { bgcolor: '#005999' },
-                textTransform: 'none',
-                fontWeight: 600,
-                px: 3,
-              }}
-            >
-              Select
-            </Button>
+            {/* Buttons Section */}
+            <Stack spacing={1} sx={{ width: '100%' }}>
+              <Button
+                variant="outlined"
+                sx={{
+                  borderColor: '#0071c2',
+                  color: '#0071c2',
+                  '&:hover': { 
+                    borderColor: '#005999',
+                    bgcolor: 'rgba(0, 113, 194, 0.04)',
+                  },
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  px: 3,
+                  py: 1,
+                }}
+              >
+                Fare Options
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  bgcolor: '#0071c2',
+                  '&:hover': { bgcolor: '#005999' },
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  px: 3,
+                  py: 1,
+                }}
+              >
+                View Details
+              </Button>
+            </Stack>
           </Box>
         </Box>
-
-        {/* Footer: Baggage & View Details */}
-        <Divider sx={{ my: 2 }} />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Stack direction="row" spacing={3} alignItems="center">
-            <BaggageIndicator baggage={flight.baggage} />
-            <Typography variant="body2" sx={{ color: '#595959' }}>
-              {flight.segments[0].airline}
-              {flight.tripType === 'multi-city' && ' + others'}
-            </Typography>
-          </Stack>
-
-          <Button
-            onClick={() => setExpanded(!expanded)}
-            endIcon={expanded ? <ExpandLess /> : <ExpandMore />}
-            sx={{
-              color: '#0071c2',
-              textTransform: 'none',
-              fontWeight: 500,
-              '&:hover': { bgcolor: '#e6f2fa' },
-            }}
-          >
-            View details
-          </Button>
-        </Box>
-
-        {/* Expanded Details */}
-        <Collapse in={expanded}>
-          <Box sx={{ mt: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-              Flight Details
-            </Typography>
-            {flight.segments.map((segment, index) => (
-              <Box key={index} sx={{ mb: 2 }}>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                  {getSegmentLabel(index, flight.tripType, flight.segments.length) || `Segment ${index + 1}`}
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#595959' }}>
-                  {segment.airline} • {segment.departureAirport} → {segment.arrivalAirport}
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#595959' }}>
-                  {segment.date} • {segment.duration} • {segment.stops === 0 ? 'Direct' : `${segment.stops} stop${segment.stops > 1 ? 's' : ''}`}
-                </Typography>
-              </Box>
-            ))}
-            <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid #e0e0e0' }}>
-              <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>Included baggage:</Typography>
-              <Typography variant="body2" sx={{ color: flight.baggage.personalItem ? '#008234' : '#595959' }}>
-                • Personal item: {flight.baggage.personalItem ? 'Included' : 'Not included'}
-              </Typography>
-              <Typography variant="body2" sx={{ color: flight.baggage.carryOn ? '#008234' : '#595959' }}>
-                • Carry-on bag: {flight.baggage.carryOn ? 'Included' : 'Not included'}
-              </Typography>
-              <Typography variant="body2" sx={{ color: flight.baggage.checkedBag ? '#008234' : '#595959' }}>
-                • Checked bag: {flight.baggage.checkedBag ? 'Included' : 'Available for purchase'}
-              </Typography>
-            </Box>
-          </Box>
-        </Collapse>
       </CardContent>
     </Card>
   );

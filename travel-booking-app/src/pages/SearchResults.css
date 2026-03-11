@@ -1,5 +1,23 @@
 .modify-search {
   background-color: #ffb703;
-  height: 12rem;
-  padding-top: 0.5rem;
+  max-height: 12rem;
+  height: auto;
+  padding: 1rem 0.5rem;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .modify-search {
+    min-height: auto;
+    padding: 0.5rem;
+    max-height: 15rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .modify-search {
+    padding: 0.25rem;
+    max-height: 20rem;
+  }
 }

@@ -12,6 +12,25 @@
   margin-bottom: 4rem;
 }
 
+/* Tablet */
+@media (max-width: 900px) {
+  .flight-search-box {
+    padding: 1rem;
+    gap: 1rem;
+    max-width: 95%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .flight-search-box {
+    padding: 0.75rem;
+    gap: 0.8rem;
+    max-width: 100%;
+    border-radius: 8px;
+  }
+}
+
 .search-button {
   background-color: #219ebc;
   color: white;
@@ -23,6 +42,15 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
   align-self: center;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .search-button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+    width: 100%;
+  }
 }
 
 .search-button:hover {
