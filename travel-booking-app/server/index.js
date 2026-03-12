@@ -77,6 +77,57 @@ app.get('/api/airports', async (req, res) => {
   }
 });
 
+app.get('/api/flight-search', async (req, res) => {
+  try {
+    const {
+      originLocationCode,
+      destinationLocationCode,
+      departureDate,
+      returnDate,
+      adults,
+      children,
+      cabinClass,
+      nonStop,
+    } = req.query;
+
+    // Validate required params
+    if (!originLocationCode || !destinationLocationCode || !departureDate) {
+      return res.status(400).json({ error: 'Missing required parameters' });
+    }
+
+    const token = await getAccessToken();
+
+    const params = {
+      originLocationCode,
+      destinationLocationCode,
+      departureDate,
+      adults: adults || '1',
+      travelClass: (cabinClass || 'ECONOMY').toUpperCase(),
+    };
+
+    if (returnDate) params.returnDate = returnDate;
+    if (children) params.children = children;
+    if (nonStop === 'true') params.nonStop = true;
+
+    const flightRes = await axios.get(
+      'https://test.api.amadeus.com/v2/shopping/flight-offers',
+      {
+        params,
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    const flights = Array.isArray(flightRes.data?.data) ? flightRes.data.data : [];
+    res.json(flights);
+  } catch (err) {
+    console.error('Flight search error:', JSON.stringify(err?.response?.data, null, 2) || err.message);
+    res.status(500).json({ 
+      error: 'Flight search failed',
+      details: err?.response?.data || err.message 
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Backend listening on http://localhost:${PORT}`);
 });
