@@ -20,6 +20,7 @@ export interface Flight {
   isFastest?: boolean;
   dealType?: string;
   baggage: Baggage;
+  fareOptions?: FareOption[];
 }
 
 export interface FlightSegment {
@@ -34,6 +35,18 @@ export interface FlightSegment {
   date: string;
 }
 
+export interface FareOption {
+  name: string;
+  priceModifier: number; // multiplier for base price
+  benefits: string[];
+  checked?: boolean;
+}
+
+export interface AirlineFareOptions {
+  airline: string;
+  options: FareOption[];
+}
+
 // Use to map name filter of airline in search form to logo in flight card
 export const AIRLINES = [
   { name: 'Air France' },
@@ -46,6 +59,407 @@ export const AIRLINES = [
   { name: 'British Airways' },
 ];
 
+// Airline-specific fare options
+export const AIRLINE_FARE_OPTIONS: { [key: string]: FareOption[] } = {
+  'Air France': [
+    {
+      name: 'Economy',
+      priceModifier: 1,
+      benefits: [
+        '1 personal item',
+        'Standard seating',
+        'In-flight snacks & beverages',
+        'Basic entertainment',
+      ],
+    },
+    {
+      name: 'Premium Economy',
+      priceModifier: 1.5,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '1 checked bag (50.7 lbs)',
+        'Choose your seat',
+        'Priority boarding',
+        'Flight change allowed',
+        'Partial refund if you cancel',
+      ],
+    },
+    {
+      name: 'Business',
+      priceModifier: 2.5,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '2 checked bags (50.7 lbs each)',
+        'Lounge access',
+        'Priority boarding',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'Premium meals',
+      ],
+    },
+    {
+      name: 'La Première',
+      priceModifier: 3.5,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag',
+        'Unlimited checked bags',
+        'Lounge access',
+        'Concierge service',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'À la carte dining',
+      ],
+    },
+  ],
+  'United Airlines': [
+    {
+      name: 'Economy',
+      priceModifier: 1,
+      benefits: [
+        '1 personal item',
+        'Standard seating',
+        'In-flight snacks',
+        'Basic entertainment',
+      ],
+    },
+    {
+      name: 'Economy Plus',
+      priceModifier: 1.4,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '1 checked bag (50.7 lbs)',
+        'Choose your seat',
+        'Priority boarding',
+        'Flight change allowed',
+        'Partial refund if you cancel',
+      ],
+    },
+    {
+      name: 'Business',
+      priceModifier: 2.8,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '2 checked bags (50.7 lbs each)',
+        'Lounge access',
+        'Priority boarding',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'Premium meals',
+      ],
+    },
+    {
+      name: 'First',
+      priceModifier: 3.8,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag',
+        'Unlimited checked bags',
+        'Lounge access',
+        'Concierge service',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'À la carte dining',
+      ],
+    },
+  ],
+  'Turkish Airlines': [
+    {
+      name: 'Economy',
+      priceModifier: 1,
+      benefits: [
+        '1 personal item (23 lbs)',
+        'Standard seating',
+        'In-flight meals',
+        'Basic entertainment',
+      ],
+    },
+    {
+      name: 'Comfort',
+      priceModifier: 1.6,
+      benefits: [
+        '1 personal item (23 lbs)',
+        '1 carry-on bag (22.1 lbs)',
+        '1 checked bag (50.7 lbs)',
+        'Choose your seat',
+        'Priority boarding',
+        'Flight change allowed',
+        'Partial refund if you cancel',
+      ],
+    },
+    {
+      name: 'Business',
+      priceModifier: 2.9,
+      benefits: [
+        '1 personal item (23 lbs)',
+        '1 carry-on bag (22.1 lbs)',
+        '2 checked bags (70.5 lbs each)',
+        'Lounge access',
+        'Priority boarding',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'Premium meals',
+      ],
+    },
+    {
+      name: 'First',
+      priceModifier: 4.0,
+      benefits: [
+        '1 personal item (23 lbs)',
+        '1 carry-on bag',
+        'Unlimited checked bags',
+        'Lounge access',
+        'Concierge service',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'À la carte dining',
+      ],
+    },
+  ],
+  'Icelandair': [
+    {
+      name: 'Light',
+      priceModifier: 1,
+      benefits: [
+        '1 personal item only',
+        'Standard seating',
+        'In-flight snacks',
+      ],
+    },
+    {
+      name: 'Standard',
+      priceModifier: 1.3,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '1 checked bag (50.7 lbs)',
+        'Choose your seat',
+        'Standard boarding',
+        'In-flight meals',
+      ],
+    },
+    {
+      name: 'Flex',
+      priceModifier: 1.7,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '2 checked bags (50.7 lbs each)',
+        'Choose your seat',
+        'Priority boarding',
+        'Flight change allowed',
+        'Partial refund if you cancel',
+      ],
+    },
+    {
+      name: 'Business',
+      priceModifier: 2.8,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '2 checked bags (70.5 lbs each)',
+        'Lounge access',
+        'Priority boarding',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'Premium meals',
+      ],
+    },
+  ],
+  'French Bee': [
+    {
+      name: 'Economy',
+      priceModifier: 1,
+      benefits: [
+        '1 personal item',
+        'Standard seating',
+        'In-flight snacks & beverages',
+      ],
+    },
+    {
+      name: 'Premium',
+      priceModifier: 1.8,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '1 checked bag (50.7 lbs)',
+        'Choose your seat',
+        'Priority boarding',
+        'Flight change allowed',
+        'Partial refund if you cancel',
+      ],
+    },
+    {
+      name: 'Business',
+      priceModifier: 3.0,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '2 checked bags (50.7 lbs each)',
+        'Lounge access',
+        'Priority boarding',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'À la carte dining',
+      ],
+    },
+  ],
+  'Ryanair': [
+    {
+      name: 'Standard',
+      priceModifier: 1,
+      benefits: [
+        '1 personal item only',
+        'Standard seating',
+      ],
+    },
+    {
+      name: 'Plus',
+      priceModifier: 1.2,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (10 lbs)',
+        'Priority boarding',
+        'Seat selection',
+      ],
+    },
+    {
+      name: 'Flex',
+      priceModifier: 1.5,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '1 checked bag (50.7 lbs)',
+        'Priority boarding',
+        'Flight change allowed',
+        'Partial refund if you cancel',
+      ],
+    },
+  ],
+  'Lufthansa': [
+    {
+      name: 'Economy',
+      priceModifier: 1,
+      benefits: [
+        '1 personal item',
+        'Standard seating',
+        'In-flight snacks & beverages',
+        'Basic entertainment',
+      ],
+    },
+    {
+      name: 'Premium Economy',
+      priceModifier: 1.6,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '1 checked bag (50.7 lbs)',
+        'Choose your seat',
+        'Priority boarding',
+        'Flight change allowed',
+        'Partial refund if you cancel',
+      ],
+    },
+    {
+      name: 'Business',
+      priceModifier: 3.0,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '2 checked bags (70.5 lbs each)',
+        'Lounge access',
+        'Priority boarding',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'Premium meals',
+      ],
+    },
+    {
+      name: 'First',
+      priceModifier: 4.2,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag',
+        'Unlimited checked bags',
+        'Lounge access',
+        'Concierge service',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'À la carte dining',
+      ],
+    },
+  ],
+  'British Airways': [
+    {
+      name: 'Euro Economy',
+      priceModifier: 1,
+      benefits: [
+        '1 personal item',
+        'Standard seating',
+        'In-flight snacks',
+      ],
+    },
+    {
+      name: 'Premium Economy',
+      priceModifier: 1.5,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '1 checked bag (50.7 lbs)',
+        'Choose your seat',
+        'Priority boarding',
+        'Flight change allowed',
+        'Partial refund if you cancel',
+      ],
+    },
+    {
+      name: 'Club World',
+      priceModifier: 2.9,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag (22.1 lbs)',
+        '2 checked bags (70.5 lbs each)',
+        'Lounge access',
+        'Priority boarding',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'Premium meals',
+      ],
+    },
+    {
+      name: 'First',
+      priceModifier: 4.0,
+      benefits: [
+        '1 personal item',
+        '1 carry-on bag',
+        'Unlimited checked bags',
+        'Lounge access',
+        'Concierge service',
+        'Free flight changes',
+        'Full refund if you cancel',
+        'Extra legroom seat',
+        'À la carte dining',
+      ],
+    },
+  ],
+};
+
+
 export const MOCK_FLIGHTS: Flight[] = [
   // ROUND-TRIP FLIGHTS (2 segments)
   {
@@ -54,7 +468,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Air France',
-        airlineLogo: 'https://airhex.com/images/airline-logos/air-france.png',
+        airlineLogo: 'https://1000logos.net/wp-content/uploads/2020/03/Air-France-Logo-640x400.png',
         departureTime: '8:45 PM',
         departureAirport: 'LGA',
         arrivalTime: '9:35 AM',
@@ -65,7 +479,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'Air France',
-        airlineLogo: 'https://airhex.com/images/airline-logos/air-france.png',
+        airlineLogo: 'https://1000logos.net/wp-content/uploads/2020/03/Air-France-Logo-640x400.png',
         departureTime: '5:50 AM',
         departureAirport: 'CDG',
         arrivalTime: '9:26 AM',
@@ -80,6 +494,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     isCheapest: true,
     dealType: 'Spring Deal',
     baggage: { personalItem: true, carryOn: true, checkedBag: true },
+    fareOptions: AIRLINE_FARE_OPTIONS['Air France'],
   },
   {
     id: '2',
@@ -87,7 +502,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'United Airlines',
-        airlineLogo: 'https://airhex.com/images/airline-logos/united-airlines.png',
+        airlineLogo: 'https://1000logos.net/wp-content/uploads/2017/06/United-Airlines-Logo-640x400.png',
         departureTime: '10:15 AM',
         departureAirport: 'EWR',
         arrivalTime: '11:30 PM',
@@ -98,7 +513,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'United Airlines',
-        airlineLogo: 'https://airhex.com/images/airline-logos/united-airlines.png',
+        airlineLogo: 'https://1000logos.net/wp-content/uploads/2017/06/United-Airlines-Logo-640x400.png',
         departureTime: '9:00 AM',
         departureAirport: 'LHR',
         arrivalTime: '12:30 PM',
@@ -111,6 +526,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     price: 992,
     isBest: true,
     baggage: { personalItem: true, carryOn: true, checkedBag: true },
+    fareOptions: AIRLINE_FARE_OPTIONS['United Airlines'],
   },
   {
     id: '3',
@@ -118,7 +534,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Turkish Airlines',
-        airlineLogo: 'https://airhex.com/images/airline-logos/turkish-airlines.png',
+        airlineLogo: 'https://1000logos.net/wp-content/uploads/2020/04/Turkish_Airlines_logo-1024x576.png',
         departureTime: '6:30 PM',
         departureAirport: 'JFK',
         arrivalTime: '12:45 PM',
@@ -129,7 +545,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'Turkish Airlines',
-        airlineLogo: 'https://airhex.com/images/airline-logos/turkish-airlines.png',
+        airlineLogo: 'https://1000logos.net/wp-content/uploads/2020/04/Turkish_Airlines_logo-1024x576.png',
         departureTime: '2:00 PM',
         departureAirport: 'IST',
         arrivalTime: '6:30 PM',
@@ -143,6 +559,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     originalPrice: 910,
     dealType: 'Spring Deal',
     baggage: { personalItem: true, carryOn: true, checkedBag: false },
+    fareOptions: AIRLINE_FARE_OPTIONS['Turkish Airlines'],
   },
 
   // ONE-WAY FLIGHTS (1 segment)
@@ -152,7 +569,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'French Bee',
-        airlineLogo: 'https://airhex.com/images/airline-logos/french-bee.png',
+        airlineLogo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQh_sx160fGvFxpc1C2C3MTOMjXuhLiPw44nw&s',
         departureTime: '11:55 PM',
         departureAirport: 'EWR',
         arrivalTime: '1:20 PM',
@@ -165,6 +582,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     price: 745,
     isFastest: true,
     baggage: { personalItem: true, carryOn: false, checkedBag: false },
+    fareOptions: AIRLINE_FARE_OPTIONS['French Bee'],
   },
   {
     id: '5',
@@ -172,7 +590,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Icelandair',
-        airlineLogo: 'https://airhex.com/images/airline-logos/icelandair.png',
+        airlineLogo: 'https://1000logos.net/wp-content/uploads/2023/05/Icelandair-Logo.png',
         departureTime: '8:00 PM',
         departureAirport: 'JFK',
         arrivalTime: '6:15 AM',
@@ -184,6 +602,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     ],
     price: 890,
     baggage: { personalItem: true, carryOn: true, checkedBag: true },
+    fareOptions: AIRLINE_FARE_OPTIONS['Icelandair'],
   },
   {
     id: '6',
@@ -191,7 +610,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Lufthansa',
-        airlineLogo: 'https://airhex.com/images/airline-logos/lufthansa.png',
+        airlineLogo: 'https://upload.wikimedia.org/wikipedia/commons/c/c4/Lufthansa_Logo_2018_crane.svg',
         departureTime: '4:20 PM',
         departureAirport: 'JFK',
         arrivalTime: '5:50 AM',
@@ -203,6 +622,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     ],
     price: 1050,
     baggage: { personalItem: true, carryOn: true, checkedBag: true },
+    fareOptions: AIRLINE_FARE_OPTIONS['Lufthansa'],
   },
   {
     id: '7',
@@ -210,7 +630,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'British Airways',
-        airlineLogo: 'https://airhex.com/images/airline-logos/british-airways.png',
+        airlineLogo: 'https://airhex.com/images/airline-logos/square/british-airways.png',
         departureTime: '7:30 PM',
         departureAirport: 'JFK',
         arrivalTime: '7:20 AM',
@@ -222,6 +642,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     ],
     price: 1120,
     baggage: { personalItem: true, carryOn: true, checkedBag: false },
+    fareOptions: AIRLINE_FARE_OPTIONS['British Airways'],
   },
 
   // MULTI-CITY FLIGHTS (3+ segments)
@@ -231,7 +652,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Air France',
-        airlineLogo: 'https://airhex.com/images/airline-logos/air-france.png',
+        airlineLogo: 'https://airhex.com/images/airline-logos/square/air-france.png',
         departureTime: '6:00 PM',
         departureAirport: 'JFK',
         arrivalTime: '7:30 AM',
@@ -242,7 +663,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'Lufthansa',
-        airlineLogo: 'https://airhex.com/images/airline-logos/lufthansa.png',
+        airlineLogo: 'https://airhex.com/images/airline-logos/square/lufthansa.png',
         departureTime: '10:00 AM',
         departureAirport: 'CDG',
         arrivalTime: '11:30 AM',
@@ -253,7 +674,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'United Airlines',
-        airlineLogo: 'https://airhex.com/images/airline-logos/united-airlines.png',
+        airlineLogo: 'https://airhex.com/images/airline-logos/square/united-airlines.png',
         departureTime: '1:00 PM',
         departureAirport: 'FRA',
         arrivalTime: '4:30 PM',
@@ -267,5 +688,6 @@ export const MOCK_FLIGHTS: Flight[] = [
     originalPrice: 2100,
     dealType: 'Multi-City Deal',
     baggage: { personalItem: true, carryOn: true, checkedBag: true },
+    fareOptions: AIRLINE_FARE_OPTIONS['Air France'],
   }
 ];
