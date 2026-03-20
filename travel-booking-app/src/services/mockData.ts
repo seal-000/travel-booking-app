@@ -468,7 +468,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Air France',
-        airlineLogo: 'https://1000logos.net/wp-content/uploads/2020/03/Air-France-Logo-640x400.png',
+        airlineLogo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlxXp1gOplIYNhtDceq5Xm2wjbAUDdFK8sdA&s',
         departureTime: '8:45 PM',
         departureAirport: 'LGA',
         arrivalTime: '9:35 AM',
@@ -479,7 +479,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'Air France',
-        airlineLogo: 'https://1000logos.net/wp-content/uploads/2020/03/Air-France-Logo-640x400.png',
+        airlineLogo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlxXp1gOplIYNhtDceq5Xm2wjbAUDdFK8sdA&s',
         departureTime: '5:50 AM',
         departureAirport: 'CDG',
         arrivalTime: '9:26 AM',
@@ -502,7 +502,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'United Airlines',
-        airlineLogo: 'https://1000logos.net/wp-content/uploads/2017/06/United-Airlines-Logo-640x400.png',
+        airlineLogo: 'https://brandlogos.net/wp-content/uploads/2025/03/united_airlines_icon-logo_brandlogos.net_54inw.png',
         departureTime: '10:15 AM',
         departureAirport: 'EWR',
         arrivalTime: '11:30 PM',
@@ -513,7 +513,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'United Airlines',
-        airlineLogo: 'https://1000logos.net/wp-content/uploads/2017/06/United-Airlines-Logo-640x400.png',
+        airlineLogo: 'https://brandlogos.net/wp-content/uploads/2025/03/united_airlines_icon-logo_brandlogos.net_54inw.png',
         departureTime: '9:00 AM',
         departureAirport: 'LHR',
         arrivalTime: '12:30 PM',
@@ -534,7 +534,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Turkish Airlines',
-        airlineLogo: 'https://1000logos.net/wp-content/uploads/2020/04/Turkish_Airlines_logo-1024x576.png',
+        airlineLogo: 'https://companieslogo.com/img/orig/THYAO.IS-f22d40e8.png?t=1720244494',
         departureTime: '6:30 PM',
         departureAirport: 'JFK',
         arrivalTime: '12:45 PM',
@@ -545,7 +545,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'Turkish Airlines',
-        airlineLogo: 'https://1000logos.net/wp-content/uploads/2020/04/Turkish_Airlines_logo-1024x576.png',
+        airlineLogo: 'https://companieslogo.com/img/orig/THYAO.IS-f22d40e8.png?t=1720244494',
         departureTime: '2:00 PM',
         departureAirport: 'IST',
         arrivalTime: '6:30 PM',
@@ -590,7 +590,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Icelandair',
-        airlineLogo: 'https://1000logos.net/wp-content/uploads/2023/05/Icelandair-Logo.png',
+        airlineLogo: 'https://companieslogo.com/img/orig/ICEAIR.IC-c353a846.png?t=1720244492',
         departureTime: '8:00 PM',
         departureAirport: 'JFK',
         arrivalTime: '6:15 AM',
