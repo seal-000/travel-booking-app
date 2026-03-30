@@ -11,8 +11,8 @@ import { SubmitButton } from '../fields/SubmitButton';
 const FlightSearchBox = () => {
     const navigate = useNavigate();
 
-    // For trip type, we can use 'oneway', 'roundtrip', 'multicity'
-    const [tripType, setTripType] = useState('oneway');
+    // For trip type, we can use 'one-way', 'round-trip', 'multi-city'
+    const [tripType, setTripType] = useState('one-way');
     const [showError, setShowError] = useState(false);
 
     // For cabin class, we can use 'economy', 'premium_economy', 'business', 'first'
@@ -44,17 +44,10 @@ const FlightSearchBox = () => {
     console.log(departure, arrival);
     console.log(departureDate, returnDate);
     console.log(multiCityRoutes);
-    
-    const getTripTypeLabel = () => {
-    if (tripType === 'roundtrip') return 'Round Trip';
-    if (tripType === 'oneway') return 'One Way';
-    if (tripType === 'multicity') return 'Multi-City';
-    return 'Round Trip'; // default fallback
-    };
 
     const handleSearch = () => {
         // Validate required fields
-        if (tripType === 'multicity') {
+        if (tripType === 'multi-city') {
             for (let i = 0; i < multiCitySegments; i++) {
                 if (!multiCityRoutes[i].departure || !multiCityRoutes[i].arrival || !multiCityRoutes[i].date) {
                     setShowError(true);
@@ -62,7 +55,7 @@ const FlightSearchBox = () => {
                 }
             }
         } else {
-            if (!departure || !arrival || !departureDate || (tripType === 'roundtrip' && !returnDate)) {
+            if (!departure || !arrival || !departureDate || (tripType === 'round-trip' && !returnDate)) {
                 setShowError(true);
                 return;
             }
@@ -74,14 +67,14 @@ const FlightSearchBox = () => {
         console.log('Direct Flights Only:', directFlightsOnly);
         console.log('Guests:', guests);
         
-        if (tripType === 'multicity') {
+        if (tripType === 'multi-city') {
             console.log('Multi-City Segments:', multiCitySegments);
             console.log('Multi-City Routes:', multiCityRoutes);
         } else {
             console.log('Departure:', departure);
             console.log('Arrival:', arrival);
             console.log('Departure Date:', departureDate?.format('YYYY-MM-DD'));
-            if (tripType === 'roundtrip') {
+            if (tripType === 'round-trip') {
                 console.log('Return Date:', returnDate?.format('YYYY-MM-DD'));
             }
         }
@@ -95,7 +88,7 @@ const FlightSearchBox = () => {
         searchParams.set('adults', String(guests.adults));
         searchParams.set('children', String(guests.children));
 
-        if (tripType === 'multicity') {
+        if (tripType === 'multi-city') {
             searchParams.set('segments', multiCitySegments.toString());
             for (let i = 0; i < multiCitySegments; i++) {
                 searchParams.set(`departure${i}`, multiCityRoutes[i].departure?.code || '');
@@ -106,7 +99,7 @@ const FlightSearchBox = () => {
             searchParams.set('departure', departure?.code || '');
             searchParams.set('arrival', arrival?.code || '');
             searchParams.set('departureDate', departureDate?.format('YYYY-MM-DD') || '');
-            if (tripType === 'roundtrip' && returnDate) {
+            if (tripType === 'round-trip' && returnDate) {
                 searchParams.set('returnDate', returnDate.format('YYYY-MM-DD'));
             }
         }
@@ -118,8 +111,6 @@ const FlightSearchBox = () => {
 
 
         <Box className="flight-search-box">
-            
-            {/*<p>{getTripTypeLabel()}</p>}*/}
 
             <TripOptionsRow 
                 tripType={tripType} 
@@ -151,7 +142,7 @@ const FlightSearchBox = () => {
           
             <Box>
 
-                {tripType === 'multicity' && (
+                {tripType === 'multi-city' && (
                 <button onClick={() => setMultiCitySegments(multiCitySegments + 1)}
                 disabled={multiCitySegments >= 3}
                 >
@@ -163,7 +154,6 @@ const FlightSearchBox = () => {
             </Box>
 
             <SubmitButton className="search-button" label="Search Flights" onSubmit={handleSearch} />
-            {/*To-do: Implement search functionality - API URL*/}
 
             <Snackbar
                 open={showError}

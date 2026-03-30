@@ -2,6 +2,10 @@
 // Types
 export type TripType = 'one-way' | 'round-trip' | 'multi-city';
 
+export interface Stop {
+  airport: string;
+  layoverTime: string;
+}
 
 export interface Baggage {
   personalItem: boolean;
@@ -32,6 +36,7 @@ export interface FlightSegment {
   arrivalAirport: string;
   duration: string;
   stops: number;
+  stopDetails?: Stop[];
   date: string;
 }
 
@@ -541,6 +546,7 @@ export const MOCK_FLIGHTS: Flight[] = [
         arrivalAirport: 'IST',
         duration: '11h 15m',
         stops: 1,
+        stopDetails: [{ airport: 'AUH', layoverTime: '2h 30m' }],
         date: 'Apr 6',
       },
       {
@@ -552,6 +558,7 @@ export const MOCK_FLIGHTS: Flight[] = [
         arrivalAirport: 'JFK',
         duration: '11h 30m',
         stops: 1,
+        stopDetails: [{ airport: 'AUH', layoverTime: '3h 15m' }],
         date: 'Apr 13',
       },
     ],
@@ -630,7 +637,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'British Airways',
-        airlineLogo: 'https://airhex.com/images/airline-logos/square/british-airways.png',
+        airlineLogo: 'https://img.icons8.com/color/1200/british-airways.jpg',
         departureTime: '7:30 PM',
         departureAirport: 'JFK',
         arrivalTime: '7:20 AM',
@@ -652,7 +659,7 @@ export const MOCK_FLIGHTS: Flight[] = [
     segments: [
       {
         airline: 'Air France',
-        airlineLogo: 'https://airhex.com/images/airline-logos/square/air-france.png',
+        airlineLogo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlxXp1gOplIYNhtDceq5Xm2wjbAUDdFK8sdA&s',
         departureTime: '6:00 PM',
         departureAirport: 'JFK',
         arrivalTime: '7:30 AM',
@@ -663,7 +670,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'Lufthansa',
-        airlineLogo: 'https://airhex.com/images/airline-logos/square/lufthansa.png',
+        airlineLogo: 'https://www.logo-designer.co/storage/2018/02/2018-new-lufthansa-logo-design-airplane-livery-2.png',
         departureTime: '10:00 AM',
         departureAirport: 'CDG',
         arrivalTime: '11:30 AM',
@@ -674,7 +681,7 @@ export const MOCK_FLIGHTS: Flight[] = [
       },
       {
         airline: 'United Airlines',
-        airlineLogo: 'https://airhex.com/images/airline-logos/square/united-airlines.png',
+        airlineLogo: 'https://brandlogos.net/wp-content/uploads/2025/03/united_airlines_icon-logo_brandlogos.net_54inw.png',
         departureTime: '1:00 PM',
         departureAirport: 'FRA',
         arrivalTime: '4:30 PM',

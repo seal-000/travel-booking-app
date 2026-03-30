@@ -1,0 +1,41 @@
+### =============================================
+### Travel Booking App - API Tests
+### =============================================
+
+### VARIABLES
+@localhost = http://localhost
+@port = 3001
+@baseUrl = {{localhost}}:{{port}}/api
+
+### =============================================
+### Test airports endpoint - search for JFK
+GET {{baseUrl}}/airports?query=JFK
+
+### Test airports endpoint - search for Los Angeles
+GET {{baseUrl}}/airports?query=Los Angeles
+
+### Test airports endpoint - search for London
+GET {{baseUrl}}/airports?query=London
+
+### =============================================
+### Flight Search Tests
+### =============================================
+
+### One-way flight search - LAX DESTINATION
+GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=LAX&departureDate=2026-03-20&adults=1
+
+
+### One-way flight search - MADRID DESTINATION
+GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=MAD&departureDate=2026-03-20&adults=1
+
+### Round-trip flight search
+GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=LAX&departureDate=2026-04-15&returnDate=2026-04-22&adults=1
+
+### Flight search with multiple passengers
+GET {{baseUrl}}/flight-search?originLocationCode=LAX&destinationLocationCode=LHR&departureDate=2026-05-01&adults=2&children=1
+
+### Flight search with cabin class
+GET {{baseUrl}}/flight-search?originLocationCode=SFO&destinationLocationCode=CDG&departureDate=2026-06-01&adults=1&cabinClass=BUSINESS
+
+### Non-stop flights only
+GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=MIA&departureDate=2026-04-10&adults=1&nonStop=true
