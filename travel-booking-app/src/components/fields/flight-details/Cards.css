@@ -1,0 +1,432 @@
+/* Flight Card Styles */
+
+.flight-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.flight-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: #0071c2;
+}
+
+.flight-card-content {
+  padding: 16px;
+}
+
+@media (min-width: 600px) {
+  .flight-card-content {
+    padding: 24px;
+  }
+}
+
+/* Badge Row */
+.badge-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 600px) {
+  .badge-row {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+}
+
+/* Main Content Container */
+.flight-card-main {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+}
+
+@media (min-width: 600px) {
+  .flight-card-main {
+    gap: 24px;
+  }
+}
+
+@media (min-width: 960px) {
+  .flight-card-main {
+    flex-direction: row;
+  }
+}
+
+/* Flight Segments Container */
+.flight-segments {
+  flex: 1;
+}
+
+.segment-row {
+  margin-bottom: 16px;
+}
+
+.segment-label {
+  color: #463e3e;
+  margin-bottom: 8px;
+  display: block;
+  font-size: 12px;
+}
+
+.segment-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex-direction: column;
+}
+
+@media (min-width: 600px) {
+  .segment-content {
+    align-items: center;
+    gap: 16px;
+    flex-direction: row;
+  }
+}
+
+/* Airline Header */
+.airline-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+@media (min-width: 600px) {
+  .airline-header {
+    width: auto;
+    justify-content: flex-start;
+  }
+}
+
+.airline-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.segment-date-mobile {
+  color: #595959;
+  font-size: 12px;
+}
+
+@media (min-width: 600px) {
+  .segment-date-mobile {
+    display: none;
+  }
+}
+
+.segment-date-desktop {
+  color: #595959;
+  min-width: 60px;
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .segment-date-desktop {
+    display: block;
+  }
+}
+
+/* Flight Route */
+.flight-route {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+@media (min-width: 600px) {
+  .flight-route {
+    gap: 16px;
+    width: auto;
+  }
+}
+
+.time-box {
+  text-align: center;
+  min-width: 50px;
+}
+
+@media (min-width: 600px) {
+  .time-box {
+    min-width: 70px;
+  }
+}
+
+.time-display {
+  font-weight: 700;
+  line-height: 1.2;
+  font-size: 1rem;
+}
+
+@media (min-width: 600px) {
+  .time-display {
+    font-size: 1.25rem;
+  }
+}
+
+.airport-code {
+  color: #595959;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+@media (min-width: 600px) {
+  .airport-code {
+    font-size: 14px;
+  }
+}
+
+/* Flight Line */
+.flight-line-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 4px;
+}
+
+@media (min-width: 600px) {
+  .flight-line-container {
+    padding: 0 8px;
+  }
+}
+
+.flight-line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.flight-line-bar {
+  flex: 1;
+  height: 2px;
+  background-color: #e0e0e0;
+  margin: 0 4px;
+  position: relative;
+}
+
+@media (min-width: 600px) {
+  .flight-line-bar {
+    margin: 0 8px;
+  }
+}
+
+.flight-duration {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 0 4px;
+  color: #595959;
+  font-size: 10px;
+}
+
+@media (min-width: 600px) {
+  .flight-duration {
+    font-size: 11px;
+  }
+}
+
+.stops-indicator {
+  color: #595959;
+  margin-top: 4px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.stops-direct {
+  color: #008234;
+}
+
+.stops-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.stop-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  color: #595959;
+}
+
+.stop-detail-item {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.stop-airport {
+  font-weight: 600;
+  color: #1a1a1a;
+  min-width: 30px;
+}
+
+.stop-layover {
+  font-size: 10px;
+  color: #8a8a8a;
+}
+
+@media (min-width: 600px) {
+  .stop-details {
+    font-size: 12px;
+  }
+
+  .stop-layover {
+    font-size: 11px;
+  }
+}
+
+/* Price & Action Column */
+.price-action-column {
+  min-width: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-left: none;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 16px;
+  margin-left: 0;
+  gap: 16px;
+}
+
+@media (min-width: 960px) {
+  .price-action-column {
+    min-width: 180px;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    border-left: 1px solid #e0e0e0;
+    border-top: none;
+    padding-left: 24px;
+    padding-top: 0;
+    margin-left: 16px;
+  }
+}
+
+/* Price Section */
+.price-section {
+  text-align: left;
+  margin-bottom: 0;
+}
+
+@media (min-width: 960px) {
+  .price-section {
+    text-align: right;
+    margin-bottom: 16px;
+  }
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #595959;
+  font-size: 12px;
+}
+
+@media (min-width: 600px) {
+  .original-price {
+    font-size: 14px;
+  }
+}
+
+.current-price {
+  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 1.25rem;
+}
+
+@media (min-width: 600px) {
+  .current-price {
+    font-size: 1.5rem;
+  }
+}
+
+.price-label {
+  color: #595959;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
+  width: auto;
+}
+
+@media (min-width: 960px) {
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.primary-button {
+  background-color: #0071c2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-transform: none;
+}
+
+.primary-button:hover {
+  background-color: #005999;
+}
+
+@media (min-width: 600px) {
+  .primary-button {
+    padding: 8px 24px;
+    font-size: 14px;
+  }
+}
+
+/* Multi-city Collapse */
+.more-flights {
+  color: #0071c2;
+  margin-top: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 32px 0;
+}
+
+.empty-state-title {
+  color: #595959;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.empty-state-subtitle {
+  color: #595959;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* Flights Count */
+.flights-count {
+  color: #595959;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
