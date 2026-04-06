@@ -22,11 +22,11 @@ GET {{baseUrl}}/airports?query=London
 ### =============================================
 
 ### One-way flight search - LAX DESTINATION
-GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=LAX&departureDate=2026-03-20&adults=1
+GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=LAX&departureDate=2026-04-20&adults=1
 
 
 ### One-way flight search - MADRID DESTINATION
-GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=MAD&departureDate=2026-03-20&adults=1
+GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=MAD&departureDate=2026-04-30&adults=1
 
 ### Round-trip flight search
 GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=LAX&departureDate=2026-04-15&returnDate=2026-04-22&adults=1

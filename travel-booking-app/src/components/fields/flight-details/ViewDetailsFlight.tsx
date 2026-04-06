@@ -20,7 +20,7 @@ import {
   Luggage,
   CheckCircle,
 } from '@mui/icons-material';
-import type { Flight, FareOption, FlightSegment } from '../../../services/mockData';
+import type { Flight, FareOption, FlightSegment } from '../../../services/types';
 
 interface ViewDetailsFlightProps {
   flight: Flight;

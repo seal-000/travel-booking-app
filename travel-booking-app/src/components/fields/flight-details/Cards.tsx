@@ -6,15 +6,13 @@ import {
   Typography,
   Chip,
   Button,
-  Collapse,
 } from '@mui/material';
 import {
   FlightTakeoff,
   FlightLand,
   AccessTime,
 } from '@mui/icons-material';
-import { MOCK_FLIGHTS } from '../../../services/mockData';
-import type { Flight, FlightSegment, FareOption, Stop } from '../../../services/mockData';
+import type { Flight, FlightSegment, FareOption, Stop } from '../../../services/types';
 import { ViewDetailsFlight } from './ViewDetailsFlight';
 import './Cards.css';
 
@@ -59,8 +57,9 @@ const SegmentRow: React.FC<{ segment: FlightSegment; label?: string }> = ({ segm
           {label}
         </Typography>
       )}
+      
+      {/* Airline Logo & Date */}
       <Box className="segment-content">
-        {/* Airline Logo & Date Row (mobile) */}
         <Box className="airline-header">
           <img
             src={segment.airlineLogo}
@@ -79,8 +78,10 @@ const SegmentRow: React.FC<{ segment: FlightSegment; label?: string }> = ({ segm
             {segment.date}
           </Typography>
         </Box>
+      </Box>
 
-        {/* Flight Times & Route */}
+      {/* Flight Times & Route */}
+      <Box className="segment-content">
         <Box className="flight-route">
           {/* Departure */}
           <Box className="time-box">
@@ -133,10 +134,9 @@ const SegmentRow: React.FC<{ segment: FlightSegment; label?: string }> = ({ segm
       </Box>
     </Box>
   );
-};
+}
 
 const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
-  const [expanded] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedFare] = useState<{ fare: FareOption; price: number } | null>(null);
 
@@ -192,36 +192,14 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
         <Box className="flight-card-main">
           {/* Flight Segments */}
           <Box className="flight-segments">
-            {/* Show first segment (and second for round-trip) in collapsed view */}
-            <SegmentRow
-              segment={flight.segments[0]}
-              label={getSegmentLabel(0, flight.tripType, flight.segments.length)}
-            />
-            {flight.tripType === 'round-trip' && flight.segments[1] && (
+            {/* Show all segments for one-way, round-trip, and multi-city flights */}
+            {flight.segments.map((segment, index) => (
               <SegmentRow
-                segment={flight.segments[1]}
-                label={getSegmentLabel(1, flight.tripType, flight.segments.length)}
+                key={index}
+                segment={segment}
+                label={getSegmentLabel(index, flight.tripType, flight.segments.length)}
               />
-            )}
-
-            {/* Additional segments for multi-city in collapsed state */}
-            {flight.tripType === 'multi-city' && !expanded && flight.segments.length > 1 && (
-              <Typography variant="body2" className="more-flights">
-                + {flight.segments.length - 1} more flight{flight.segments.length > 2 ? 's' : ''}
-              </Typography>
-            )}
-
-            {/* Expanded segments for multi-city */}
-            <Collapse in={expanded}>
-              {flight.tripType === 'multi-city' &&
-                flight.segments.slice(1).map((segment, index) => (
-                  <SegmentRow
-                    key={index + 1}
-                    segment={segment}
-                    label={getSegmentLabel(index + 1, flight.tripType, flight.segments.length)}
-                  />
-                ))}
-            </Collapse>
+            ))}
           </Box>
 
           {/* Price & Action Column */}
@@ -281,35 +259,9 @@ interface FlightCardsProps {
 }
 
 export const FlightCards: React.FC<FlightCardsProps> = ({ filters, flights: initialFlights }) => {
-  const flightsList = initialFlights || MOCK_FLIGHTS;
-  const filteredFlights = flightsList.filter((flight: Flight) => {
-    // Filter by airlines
-    if (filters?.airlines && filters.airlines.length > 0) {
-      const flightAirlines = flight.segments.map((s) => s.airline);
-      const hasMatchingAirline = flightAirlines.some((airline) =>
-        filters.airlines.includes(airline)
-      );
-      if (!hasMatchingAirline) return false;
-    }
+  const flightsList = initialFlights || [];
 
-    // Filter by stops
-    if (filters?.stops && filters.stops.length > 0) {
-      const maxStops = Math.max(...flight.segments.map((s) => s.stops));
-      const stopCategory = maxStops >= 2 ? 2 : maxStops;
-      if (!filters.stops.includes(stopCategory)) return false;
-    }
-
-    // Filter by price range
-    if (filters?.priceRange) {
-      if (flight.price < filters.priceRange[0] || flight.price > filters.priceRange[1]) {
-        return false;
-      }
-    }
-
-    return true;
-  });
-
-  if (filteredFlights.length === 0) {
+  if (flightsList.length === 0) {
     return (
       <Box className="empty-state">
         <Typography variant="h6" className="empty-state-title">
@@ -325,9 +277,9 @@ export const FlightCards: React.FC<FlightCardsProps> = ({ filters, flights: init
   return (
     <Box>
       <Typography variant="body2" className="flights-count">
-        {filteredFlights.length} flight{filteredFlights.length !== 1 ? 's' : ''} found
+        {flightsList.length} flight{flightsList.length !== 1 ? 's' : ''} found
       </Typography>
-      {filteredFlights.map((flight) => (
+      {flightsList.map((flight) => (
         <FlightCard key={flight.id} flight={flight} />
       ))}
     </Box>

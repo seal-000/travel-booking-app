@@ -1,16 +1,19 @@
-import React, { useState, useMemo } from 'react';
-import { Box } from '@mui/material';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Box, CircularProgress, Alert } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
 import './SearchResults.css';
 import { FlightCards } from '../components/fields/flight-details/Cards';
 import FlightSearchBox from '../components/flight-search/FlightSearchBox';
 import FilterSidebar from '../components/fields/FilterSidebar';
 import type { FilterState } from '../components/fields/FilterSidebar';
-import { MOCK_FLIGHTS } from '../services/mockData';
-import type { Flight } from '../services/mockData';
+import type { Flight } from '../services/types';
+import { searchFlights } from '../services/flightService';
 
 const SearchResults: React.FC = () => {
     const [searchParams] = useSearchParams();
+    const [flights, setFlights] = useState<Flight[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [filters, setFilters] = useState<FilterState>({
         airlines: [],
         stops: [],
@@ -18,46 +21,91 @@ const SearchResults: React.FC = () => {
     });
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-    // Filter flights based on search parameters
-    const filteredFlights = useMemo(() => {
-        let tripType = searchParams.get('tripType') || 'one-way';
-        
-        // Normalize trip type values to match TripType enum
-        if (tripType === 'oneway') tripType = 'one-way';
-        if (tripType === 'roundtrip') tripType = 'round-trip';
-        if (tripType === 'multicity') tripType = 'multi-city';
-        
-        const departure = searchParams.get('departure');
-        const arrival = searchParams.get('arrival');
-        const directFlightsOnly = searchParams.get('directFlightsOnly') === 'true';
+    // Fetch flights from API when search parameters change
+    useEffect(() => {
+        const fetchFlights = async () => {
+            const departure = searchParams.get('departure');
+            const arrival = searchParams.get('arrival');
+            const departureDate = searchParams.get('departureDate');
+            const returnDate = searchParams.get('returnDate');
+            const adultsStr = searchParams.get('adults') || '1';
+            const childrenStr = searchParams.get('children') || '0';
+            const cabinClass = searchParams.get('cabinClass') || 'economy';
+            const nonStopStr = searchParams.get('directFlightsOnly') || 'false';
 
-        return MOCK_FLIGHTS.filter((flight: Flight) => {
-            // Filter by trip type
-            if (flight.tripType !== tripType) return false;
-
-            // Filter by departure and arrival airports
-            if (departure && !flight.segments.some(seg => seg.departureAirport === departure)) return false;
-            if (arrival && !flight.segments.some(seg => seg.arrivalAirport === arrival)) return false;
-
-            // Filter by direct flights only
-            if (directFlightsOnly && flight.segments.some(seg => seg.stops > 0)) return false;
-
-            // For roundtrip, check if departure and arrival match the route
-            if (tripType === 'round-trip' && flight.segments.length >= 2) {
-                const firstSegment = flight.segments[0];
-                if (departure && firstSegment.departureAirport !== departure) return false;
-                if (arrival && firstSegment.arrivalAirport !== arrival) return false;
+            // Validate required parameters
+            if (!departure || !arrival || !departureDate) {
+                setError('Missing required search parameters');
+                setFlights([]);
+                return;
             }
 
-            // For one-way flights
-            if (tripType === 'one-way' && flight.segments.length === 1) {
-                if (departure && flight.segments[0].departureAirport !== departure) return false;
-                if (arrival && flight.segments[0].arrivalAirport !== arrival) return false;
+            setLoading(true);
+            setError(null);
+
+            try {
+                const results = await searchFlights({
+                    originLocationCode: departure,
+                    destinationLocationCode: arrival,
+                    departureDate,
+                    returnDate: returnDate || undefined,
+                    adults: parseInt(adultsStr),
+                    children: parseInt(childrenStr) || undefined,
+                    cabinClass,
+                    nonStop: nonStopStr === 'true',
+                });
+
+                setFlights(results);
+            } catch (err) {
+                const errorMessage = err instanceof Error ? err.message : 'Failed to fetch flights';
+                setError(errorMessage);
+                setFlights([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFlights();
+    }, [searchParams]);
+
+    // Extract unique airlines from flights
+    const availableAirlines = useMemo(() => {
+        const airlineSet = new Set<string>();
+        flights.forEach(flight => {
+            flight.segments.forEach(segment => {
+                airlineSet.add(segment.airline);
+            });
+        });
+        return Array.from(airlineSet).sort();
+    }, [flights]);
+
+    // Filter flights based on filter sidebar state
+    const filteredFlights = useMemo(() => {
+        return flights.filter((flight: Flight) => {
+            // Filter by airline
+            if (filters.airlines.length > 0) {
+                const flightAirline = flight.segments[0]?.airline;
+                if (!flightAirline || !filters.airlines.includes(flightAirline)) {
+                    return false;
+                }
+            }
+
+            // Filter by stops
+            if (filters.stops.length > 0) {
+                const maxStops = Math.min(...flight.segments.map(s => s.stops));
+                if (!filters.stops.includes(maxStops)) {
+                    return false;
+                }
+            }
+
+            // Filter by price range
+            if (flight.price < filters.priceRange[0] || flight.price > filters.priceRange[1]) {
+                return false;
             }
 
             return true;
         });
-    }, [searchParams]);
+    }, [flights, filters]);
 
     return (
         <div>
@@ -81,13 +129,26 @@ const SearchResults: React.FC = () => {
                     filters={filters} 
                     onFilterChange={setFilters} 
                     maxPrice={3000}
+                    availableAirlines={availableAirlines}
                     isMobileOpen={mobileFiltersOpen}
                     onMobileClose={() => setMobileFiltersOpen(!mobileFiltersOpen)}
                 />
                 
                 {/* Flight Results */}
                 <Box sx={{ flex: 1 }}>
-                    <FlightCards filters={filters} flights={filteredFlights} />
+                    {loading && (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 400 }}>
+                            <CircularProgress />
+                        </Box>
+                    )}
+                    {error && (
+                        <Alert severity="error" sx={{ mb: 2 }}>
+                            {error}
+                        </Alert>
+                    )}
+                    {!loading && !error && (
+                        <FlightCards filters={filters} flights={filteredFlights} />
+                    )}
                 </Box>
             </Box>
         </section>

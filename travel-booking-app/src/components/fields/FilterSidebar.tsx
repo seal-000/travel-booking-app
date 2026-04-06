@@ -17,7 +17,6 @@ import {
 import FilterListIcon from '@mui/icons-material/FilterList';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { AIRLINES } from '../../services/mockData';
 
 export interface FilterState {
   airlines: string[];
@@ -29,6 +28,7 @@ interface FilterSidebarProps {
   filters: FilterState;
   onFilterChange: (filters: FilterState) => void;
   maxPrice?: number;
+  availableAirlines?: string[];
   isMobileOpen?: boolean;
   onMobileClose?: () => void;
 }
@@ -77,6 +77,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   filters,
   onFilterChange,
   maxPrice = 3000,
+  availableAirlines = [],
   isMobileOpen = false,
   onMobileClose,
 }) => {
@@ -206,26 +207,34 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       {/* Airlines Filter */}
       <FilterSection title="Airlines">
-        <FormGroup>
-          {AIRLINES.map((airline) => (
-            <FormControlLabel
-              key={airline.name}
-              control={
-                <Checkbox
-                  checked={filters.airlines.includes(airline.name)}
-                  onChange={() => handleAirlineChange(airline.name)}
-                  size="small"
-                  sx={{ color: '#0071c2', '&.Mui-checked': { color: '#0071c2' } }}
+        {availableAirlines.length > 0 ? (
+          <Box sx={{ maxHeight: 250, overflowY: 'auto', pr: 1 }}>
+            <FormGroup>
+              {availableAirlines.map((airline) => (
+                <FormControlLabel
+                  key={airline}
+                  control={
+                    <Checkbox
+                      checked={filters.airlines.includes(airline)}
+                      onChange={() => handleAirlineChange(airline)}
+                      size="small"
+                      sx={{ color: '#0071c2', '&.Mui-checked': { color: '#0071c2' } }}
+                    />
+                  }
+                  label={
+                    <Typography variant="body2" sx={{ color: '#1a1a1a' }}>
+                      {airline}
+                    </Typography>
+                  }
                 />
-              }
-              label={
-                <Typography variant="body2" sx={{ color: '#1a1a1a' }}>
-                  {airline.name}
-                </Typography>
-              }
-            />
-          ))}
-        </FormGroup>
+              ))}
+            </FormGroup>
+          </Box>
+        ) : (
+          <Typography variant="body2" sx={{ color: '#8a8a8a', fontStyle: 'italic' }}>
+            No airlines available
+          </Typography>
+        )}
       </FilterSection>
     </Box>
   );
@@ -357,26 +366,34 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
             {/* Airlines Filter */}
             <FilterSection title="Airlines">
-              <FormGroup>
-                {AIRLINES.map((airline) => (
-                  <FormControlLabel
-                    key={airline.name}
-                    control={
-                      <Checkbox
-                        checked={filters.airlines.includes(airline.name)}
-                        onChange={() => handleAirlineChange(airline.name)}
-                        size="small"
-                        sx={{ color: '#0071c2', '&.Mui-checked': { color: '#0071c2' } }}
+              {availableAirlines.length > 0 ? (
+                <Box sx={{ maxHeight: 250, overflowY: 'auto', pr: 1 }}>
+                  <FormGroup>
+                    {availableAirlines.map((airline) => (
+                      <FormControlLabel
+                        key={airline}
+                        control={
+                          <Checkbox
+                            checked={filters.airlines.includes(airline)}
+                            onChange={() => handleAirlineChange(airline)}
+                            size="small"
+                            sx={{ color: '#0071c2', '&.Mui-checked': { color: '#0071c2' } }}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2" sx={{ color: '#1a1a1a' }}>
+                            {airline}
+                          </Typography>
+                        }
                       />
-                    }
-                    label={
-                      <Typography variant="body2" sx={{ color: '#1a1a1a' }}>
-                        {airline.name}
-                      </Typography>
-                    }
-                  />
-                ))}
-              </FormGroup>
+                    ))}
+                  </FormGroup>
+                </Box>
+              ) : (
+                <Typography variant="body2" sx={{ color: '#8a8a8a', fontStyle: 'italic' }}>
+                  No airlines available
+                </Typography>
+              )}
             </FilterSection>
 
             {/* Clear All Button */}

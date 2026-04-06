@@ -64,13 +64,15 @@
 
 .segment-row {
   margin-bottom: 16px;
+  padding: 12px;
+  
 }
+
 
 .segment-label {
   color: #463e3e;
-  margin-bottom: 8px;
-  display: block;
   font-size: 12px;
+  font-weight: 600;
 }
 
 .segment-content {

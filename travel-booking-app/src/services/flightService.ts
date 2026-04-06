@@ -1,20 +1,7 @@
 import axios from 'axios';
-
-// TODO: Remenber card flight with its details and add to booking summary page.
-export interface FlightOffer {
-  id: string;
-  source: string;
-  instantTicketingRequired: boolean;
-  nonHomogeneous: boolean;
-  oneWay: boolean;
-  lastTicketingDate: string;
-  numberOfBookableSeats: number;
-  itineraries: any[];
-  price: { total: string; base: string; fee: string; grandTotal: string };
-  pricingOptions: any;
-  validatingAirlineCodes: string[];
-  travelerPricings: any[];
-}
+import { transformFlightOffers } from './flightTransformer';
+import type { Flight } from './types';
+import type { AmadeusFlightOffer } from './flightTransformer';
 
 export async function searchFlights(params: {
   originLocationCode: string;
@@ -25,7 +12,7 @@ export async function searchFlights(params: {
   children?: number;
   cabinClass: string;
   nonStop?: boolean;
-}): Promise<FlightOffer[]> {
+}): Promise<Flight[]> {
   try {
     const { data } = await axios.get('/api/flight-search', {
       params: {
@@ -39,7 +26,10 @@ export async function searchFlights(params: {
         nonStop: params.nonStop,
       },
     });
-    return Array.isArray(data) ? data : [];
+    
+    // Transform Amadeus API response to application format
+    const flightOffers = Array.isArray(data) ? data : [];
+    return transformFlightOffers(flightOffers as AmadeusFlightOffer[]);
   } catch (err) {
     console.error('Flight search failed:', err);
     return [];

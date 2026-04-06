@@ -1,0 +1,172 @@
+{
+    "AF": {
+        "name": "Air France",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlxXp1gOplIYNhtDceq5Xm2wjbAUDdFK8sdA&s"
+    },
+    "UA": {
+        "name": "United Airlines",
+        "logo": "https://brandlogos.net/wp-content/uploads/2025/03/united_airlines_icon-logo_brandlogos.net_54inw.png"
+    },
+    "TK": {
+        "name": "Turkish Airlines",
+        "logo": "https://companieslogo.com/img/orig/THYAO.IS-f22d40e8.png?t=1720244494"
+    },
+    "FI": {
+        "name": "Icelandair",
+        "logo": "https://logos-world.net/wp-content/uploads/2022/05/Icelandair-Symbol.png"
+    },
+    "F5": {
+        "name": "French Bee",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7Dw76N6WBsmnlyk7j_vs0oV3NokPtMzn7vw&s"
+    },
+    "FR": {
+        "name": "Ryanair",
+        "logo": "https://companieslogo.com/img/orig/RYAAY-66486679.png?t=1720244493"
+    },
+    "LH": {
+        "name": "Lufthansa",
+        "logo": "https://www.lufthansa.com/favicon.ico"
+    },
+    "BA": {
+        "name": "British Airways",
+        "logo": "https://img.icons8.com/color/1200/british-airways.jpg"
+    },
+    "TP": {
+        "name": "TAP Air Portugal",
+        "logo": "https://www.pngfind.com/pngs/m/420-4208575_tap-portugal-logo-logok-tap-air-portugal-logo.png"
+    },
+    "B6": {
+        "name": "JetBlue Airways",
+        "logo": "https://www.jetblue.com/favicon.ico"
+    },
+    "DL": {
+        "name": "Delta Air Lines",
+        "logo": "https://s3-symbol-logo.tradingview.com/delta-air-lines--600.png"
+    },
+    "AA": {
+        "name": "American Airlines",
+        "logo": "https://www.freelogovectors.net/wp-content/uploads/2023/05/american_airlines_logo-freelogovectors.net_.png"
+    },
+    "SQ": {
+        "name": "Singapore Airlines",
+        "logo": "https://www.clipartmax.com/png/small/441-4419079_airlines-logo-logok-logo-of-singapore-airlines.png"
+    },
+    "NZ": {
+        "name": "Air New Zealand",
+        "logo": "https://www.airnewzealand.co.nz/favicon.ico"
+    },
+    "QF": {
+        "name": "Qantas Airways",
+        "logo": "https://www.qantas.com/favicon.ico"
+    },
+    "AC": {
+        "name": "Air Canada",
+        "logo": "https://www.aircanada.com/favicon.ico"
+    },
+    "JL": {
+        "name": "Japan Airlines",
+        "logo": "https://www.jal.co.jp/favicon.ico"
+    },
+    "IB": {
+        "name": "Iberia",
+        "logo": "https://logosandtypes.com/wp-content/uploads/2020/07/Iberia.png"
+    },
+    "S4": {
+        "name": "Azores Airlines",
+        "logo": "https://josemendes.me/wp-content/uploads/2017/01/Sata_4.jpg"
+    },
+    "UX": {
+        "name": "Air Europa",
+        "logo": "https://www.aireuropa.com/favicon.ico"
+    },
+    "AT": {
+        "name": "Royal Air Maroc",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5T1ZzIx1R3bnUc3HAK_OMmxCw_Gcmn48RAg&s "
+    },
+    "AV": {
+        "name": "Avianca",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsX3AErK8dyqywQCNvjUdfHxewcn96gbwFyA&s"
+    },
+    "AZ": {
+        "name": "ITA Airways",
+        "logo": "https://logos-world.net/wp-content/uploads/2022/11/ITA-Airways-Emblem.png"
+    },
+    "KL": {
+        "name": "KLM Royal Dutch Airlines",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTcVvYRRSpjJh2ijcYusWBUxBgd1At8JzmfQ&s"
+    },
+    "VS": {
+        "name": "Virgin Atlantic",
+        "logo": "https://play-lh.googleusercontent.com/XnTM-LRc0CubXmaAsOAuW67l6_yAUWPSJKGvAjG_08z3OaqoeD4smlTrbTyd54yhkwQtrrMQEyxGY0R_C6LZbA"
+    },
+    "LO": {
+        "name": "LOT Polish Airlines",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlny4ASK_wH5vPrxzf9TWodz1WHOwqoiY_7g&s"
+    },
+    "EI": {
+        "name": "Aer Lingus",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo2nhcKwEpYQJLShggWNhpKA2IA21n7EYVdw&s"
+    },
+    "SN": {
+        "name": "Brussels Airlines",
+        "logo": "https://play-lh.googleusercontent.com/q1TZjTl1wz8en18YsYpdooLdq3r6p-CvtyQn-x9iTl9BgOkcG6zkkFhRxbcKnD39zw"
+    },
+    "AY": {
+        "name": "Finnair",
+        "logo": "https://i.pinimg.com/736x/7f/66/d9/7f66d9d9faab881eacee6f588c0bbd6e.jpg"
+    },
+    "OS": {
+        "name": "Austrian Airlines",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSSk8MyLFweIWLs8wODLb7szVatcCN10D2SQ&s"
+    },
+    "LX": {
+        "name": "SWISS International Air Lines",
+        "logo": "https://logos-world.net/wp-content/uploads/2023/02/Swiss-International-Air-Lines-Symbol.png"
+    },
+    "SK": {
+        "name": "SAS Scandinavian Airlines",
+        "logo": "https://download.logo.wine/logo/Scandinavian_Airlines/Scandinavian_Airlines-Logo.wine.png"
+    },
+    "EY": {
+        "name": "Etihad Airways",
+        "logo": "https://images.seeklogo.com/logo-png/17/2/etihad-airways-logo-png_seeklogo-177330.png"
+    },
+    "CA": {
+        "name": "Air China",
+        "logo": "https://companieslogo.com/img/orig/601111.SS-742703d1.png?t=1720244490"
+    },
+    "MH": {
+        "name": "Malaysia Airlines",
+        "logo": "https://i.pinimg.com/474x/30/00/c1/3000c125091480d284521c31088e9023.jpg"
+    },
+    "OR": {
+        "name": "TUI Airlines Nederland B.V.",
+        "logo": "https://static.wikia.nocookie.net/aviation-airport/images/9/98/TUI_CMYK600x400.png/revision/latest?cb=20240427151821"
+    },
+    "QR": {
+        "name": "Qatar Airways",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-2gy3RQl6-FOuZOIn-HbnX5bSRRwWxlONFQ&s"
+    },
+    "MU": {
+        "name": "China Eastern Airlines",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX99CI5sY64ETSMQ2VHOGW68t5jOwHQPJ2Zg&s"
+    },
+    "CI": {
+        "name": "China Airlines",
+        "logo": "https://companieslogo.com/img/orig/2610.TW-8e623305.png?t=1729911170"
+    },
+    "BR": {
+        "name": "EVA Air",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy40wysyh4B6VEalGM3KD3SGym2W-0BSy_Ww&s"
+    },
+    "CX": {
+        "name": "Cathay Pacific Airways",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtRLHP40pWoghVVzIEbkt7BNPNbfWIsibgfQ&s"
+    },
+    "EK": {
+        "name": "Emirates",
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/3840px-Emirates_logo.svg.png"
+    }
+
+
+}
