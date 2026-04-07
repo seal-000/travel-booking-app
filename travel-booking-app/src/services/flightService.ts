@@ -12,6 +12,7 @@ export async function searchFlights(params: {
   children?: number;
   cabinClass: string;
   nonStop?: boolean;
+  tripType?: string;
 }): Promise<Flight[]> {
   try {
     const { data } = await axios.get('/api/flight-search', {
@@ -29,7 +30,7 @@ export async function searchFlights(params: {
     
     // Transform Amadeus API response to application format
     const flightOffers = Array.isArray(data) ? data : [];
-    return transformFlightOffers(flightOffers as AmadeusFlightOffer[]);
+    return transformFlightOffers(flightOffers as AmadeusFlightOffer[], params.tripType);
   } catch (err) {
     console.error('Flight search failed:', err);
     return [];

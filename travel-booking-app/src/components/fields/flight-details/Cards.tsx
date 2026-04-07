@@ -66,7 +66,12 @@ const SegmentRow: React.FC<{ segment: FlightSegment; label?: string }> = ({ segm
             alt={segment.airline}
             className="airline-logo"
             onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              e.currentTarget.src = 'https://via.placeholder.com/32?text=✈';
+              const img = e.currentTarget;
+              // Only set fallback once to prevent infinite error loop
+              if (!img.hasAttribute('data-fallback-tried')) {
+                img.setAttribute('data-fallback-tried', 'true');
+                img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"%3E%3Ccircle cx="16" cy="16" r="15" fill="%230071c2"/%3E%3Ctext x="16" y="20" font-size="16" fill="white" text-anchor="middle" dominant-baseline="middle"%3E✈%3C/text%3E%3C/svg%3E';
+              }
             }}
           />
 
@@ -137,6 +142,7 @@ const SegmentRow: React.FC<{ segment: FlightSegment; label?: string }> = ({ segm
 }
 
 const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
+  console.log('First card flight data:', flight);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedFare] = useState<{ fare: FareOption; price: number } | null>(null);
 

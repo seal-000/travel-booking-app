@@ -19,9 +19,9 @@ interface TripOptionsRowProps {
 const TripOptionsRow: React.FC<TripOptionsRowProps> = ({ tripType, onTripTypeChange, cabinClass, onCabinClassChange, directFlightsOnly, onDirectFlightsChange, guests = { adults: 1, children: 0 }, onGuestUpdate }) => {
     
     const tripOptions = [
-        { label: 'Round Trip', value: 'roundtrip' },
-        { label: 'One Way', value: 'oneway' },
-        { label: 'Multi-City', value: 'multicity' },
+        { label: 'Round Trip', value: 'round-trip' },
+        { label: 'One Way', value: 'one-way' },
+        { label: 'Multi-City', value: 'multi-city' },
     ];
     
     const cabinOptions = [
@@ -44,14 +44,14 @@ const TripOptionsRow: React.FC<TripOptionsRowProps> = ({ tripType, onTripTypeCha
                 onChange={onCabinClassChange} 
                 options={cabinOptions} 
             />
-            {tripType !== 'multicity' && (
+            {tripType !== 'multi-city' && (
             <FormControlLabel
                 label="Direct flights only"
                 checked={directFlightsOnly}
                 onChange={onDirectFlightsChange}
                 />
             )}
-            {tripType === 'multicity' && (
+            {tripType === 'multi-city' && (
             <GuestSelector 
                 guests={guests}
                 onGuestUpdate={onGuestUpdate}

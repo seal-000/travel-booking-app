@@ -68,7 +68,7 @@ const TripRouteAndDateRow = ({
     };
 
     const handleSwap = (index: number) => {
-        if (tripType === 'multicity') {
+        if (tripType === 'multi-city') {
             console.log(`Swapping departure and arrival at index ${index}`);
             const newRoutes = [...multiCityRoutes];
             newRoutes[index] = { 
@@ -94,7 +94,7 @@ const TripRouteAndDateRow = ({
         }
     };
 
-    if (tripType === 'multicity') {
+    if (tripType === 'multi-city') {
         return (
             <>
                 {Array.from({ length: segmentCount }, (_, index) => (
@@ -137,7 +137,7 @@ const TripRouteAndDateRow = ({
                 selectedAirport={arrival}
                 onAirportSelect={(airport) => onArrivalChange(airport)}
             />
-            {tripType === 'roundtrip' && (
+            {tripType === 'round-trip' && (
                 <DateRangePickerComponent 
                     onDateRangeChange={(start, end) => {
                         onDepartureDateChange(start);
@@ -145,12 +145,12 @@ const TripRouteAndDateRow = ({
                     }}
                 />
             )}
-            {tripType === 'oneway' && (
+            {tripType === 'one-way' && (
                 <DatePickerComponent 
                     onDateChange={onDepartureDateChange}
                 />
             )}
-            {(tripType === 'roundtrip' || tripType === 'oneway') && (
+            {(tripType === 'round-trip' || tripType === 'one-way') && (
             <GuestSelector 
                 guests={guests}
                 onGuestUpdate={onGuestUpdate}

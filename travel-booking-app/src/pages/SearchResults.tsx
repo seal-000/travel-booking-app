@@ -32,6 +32,9 @@ const SearchResults: React.FC = () => {
             const childrenStr = searchParams.get('children') || '0';
             const cabinClass = searchParams.get('cabinClass') || 'economy';
             const nonStopStr = searchParams.get('directFlightsOnly') || 'false';
+            const tripType = searchParams.get('tripType');
+
+            console.log('[SearchResults] URL params:', { departure, arrival, departureDate, returnDate, tripType });
 
             // Validate required parameters
             if (!departure || !arrival || !departureDate) {
@@ -44,6 +47,7 @@ const SearchResults: React.FC = () => {
             setError(null);
 
             try {
+                console.log('[SearchResults] Calling searchFlights with:', { departure, arrival, departureDate, returnDate, tripType });
                 const results = await searchFlights({
                     originLocationCode: departure,
                     destinationLocationCode: arrival,
@@ -53,6 +57,7 @@ const SearchResults: React.FC = () => {
                     children: parseInt(childrenStr) || undefined,
                     cabinClass,
                     nonStop: nonStopStr === 'true',
+                    tripType: tripType || undefined,
                 });
 
                 setFlights(results);

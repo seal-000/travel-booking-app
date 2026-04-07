@@ -155,12 +155,16 @@ function transformItinerary(itinerary: AmadeusItinerary): FlightSegment {
 /**
  * Transform Amadeus FlightOffer to application Flight
  */
-export function transformFlightOffer(offer: AmadeusFlightOffer): Flight {
-  // Determine trip type based on number of itineraries
-  const tripType = offer.oneWay ? 'one-way' : offer.itineraries.length > 1 ? 'round-trip' : 'one-way';
+export function transformFlightOffer(offer: AmadeusFlightOffer, userSearchTripType?: string): Flight {
+  // Use the user's search trip type if provided, otherwise infer from API response
+  const tripType = (userSearchTripType || (offer.oneWay ? 'one-way' : offer.itineraries.length > 1 ? 'round-trip' : 'one-way')) as any;
+  
+  console.log(`[Transformer] Processing flight with tripType: ${tripType}, itineraries: ${offer.itineraries.length}`);
   
   // Transform each itinerary to a single flight segment
   const allSegments = offer.itineraries.map(itinerary => transformItinerary(itinerary));
+  
+  console.log(`[Transformer] Created ${allSegments.length} segments from ${offer.itineraries.length} itineraries`);
 
   // Get the primary airline from the first segment
   const primaryCarrier = offer.itineraries[0].segments[0].carrierCode;
@@ -185,6 +189,6 @@ export function transformFlightOffer(offer: AmadeusFlightOffer): Flight {
 /**
  * Transform array of Amadeus FlightOffers to application Flights
  */
-export function transformFlightOffers(offers: AmadeusFlightOffer[]): Flight[] {
-  return offers.map(offer => transformFlightOffer(offer));
+export function transformFlightOffers(offers: AmadeusFlightOffer[], userSearchTripType?: string): Flight[] {
+  return offers.map(offer => transformFlightOffer(offer, userSearchTripType));
 }

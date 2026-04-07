@@ -208,7 +208,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
       {/* Airlines Filter */}
       <FilterSection title="Airlines">
         {availableAirlines.length > 0 ? (
-          <Box sx={{ maxHeight: 250, overflowY: 'auto', pr: 1 }}>
+          <Box sx={{ maxHeight: 250, overflowY: 'auto', pl: 1.4 }}>
             <FormGroup>
               {availableAirlines.map((airline) => (
                 <FormControlLabel
@@ -367,7 +367,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
             {/* Airlines Filter */}
             <FilterSection title="Airlines">
               {availableAirlines.length > 0 ? (
-                <Box sx={{ maxHeight: 250, overflowY: 'auto', pr: 1 }}>
+                <Box sx={{ maxHeight: 250, overflowY: 'auto',  pl: 1.4  }}>
                   <FormGroup>
                     {availableAirlines.map((airline) => (
                       <FormControlLabel

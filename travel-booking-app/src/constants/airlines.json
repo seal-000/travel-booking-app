@@ -166,6 +166,26 @@
     "EK": {
         "name": "Emirates",
         "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/3840px-Emirates_logo.svg.png"
+    },
+    "6X": {
+        "name": "Air Odisha",
+        "logo": "https://www.ch-aviation.com/images/stockPhotos/3994/fbc6ad96481de557d5ca8a3b1bcd92a3d7463f75.jpg"
+    },
+    "AS": {
+        "name": "Alaska Airlines",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2kLv_uFO-rcIgyolahZ-4WOsrAhqg5T_Kow&s"
+    },
+    "F9": {
+        "name": "Frontier Airlines",
+        "logo": "https://1000logos.net/wp-content/uploads/2020/04/Emblem-Frontier-Airlines.jpg"
+    },
+    "HA": {
+        "name": "Hawaiian Airlines",
+        "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_p9c_ZGpJLtyxG5dqmBhlqejMf-cqyG1QRw&s"
+    },
+    "SY": {
+        "name": "Sun Country Airlines",
+        "logo": "https://companieslogo.com/img/orig/SNCY-df1d0c0e.png?t=1720244494"
     }
 
 
