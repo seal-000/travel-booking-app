@@ -24,49 +24,143 @@ const SearchResults: React.FC = () => {
     // Fetch flights from API when search parameters change
     useEffect(() => {
         const fetchFlights = async () => {
-            const departure = searchParams.get('departure');
-            const arrival = searchParams.get('arrival');
-            const departureDate = searchParams.get('departureDate');
-            const returnDate = searchParams.get('returnDate');
+            const tripType = searchParams.get('tripType');
             const adultsStr = searchParams.get('adults') || '1';
             const childrenStr = searchParams.get('children') || '0';
             const cabinClass = searchParams.get('cabinClass') || 'economy';
             const nonStopStr = searchParams.get('directFlightsOnly') || 'false';
-            const tripType = searchParams.get('tripType');
 
-            console.log('[SearchResults] URL params:', { departure, arrival, departureDate, returnDate, tripType });
+            // Handle multi-city trips
+            if (tripType === 'multi-city') {
+                const multiStopDates = searchParams.get('multiStopDates') || '';
+                const dates = multiStopDates.split('|').filter(d => d);
+                const segments = dates.length;
+                
+                // Validate multi-city parameters
+                const multiCityRoutes = [];
+                let isValid = true;
+                
+                for (let i = 0; i < segments; i++) {
+                    const departure = searchParams.get(`departure${i}`);
+                    const arrival = searchParams.get(`arrival${i}`);
+                    const date = searchParams.get(`date${i}`);
+                    
+                    if (!departure || !arrival || !date) {
+                        isValid = false;
+                        break;
+                    }
+                    
+                    multiCityRoutes.push({ departure, arrival, date });
+                }
 
-            // Validate required parameters
-            if (!departure || !arrival || !departureDate) {
-                setError('Missing required search parameters');
-                setFlights([]);
-                return;
-            }
+                if (!isValid || multiCityRoutes.length === 0) {
+                    setError('Missing required search parameters for multi-city trip');
+                    setFlights([]);
+                    return;
+                }
 
-            setLoading(true);
-            setError(null);
+                console.log('[SearchResults] Multi-city URL params:', { segments, multiStopDates, multiCityRoutes, tripType });
 
-            try {
-                console.log('[SearchResults] Calling searchFlights with:', { departure, arrival, departureDate, returnDate, tripType });
-                const results = await searchFlights({
-                    originLocationCode: departure,
-                    destinationLocationCode: arrival,
-                    departureDate,
-                    returnDate: returnDate || undefined,
-                    adults: parseInt(adultsStr),
-                    children: parseInt(childrenStr) || undefined,
-                    cabinClass,
-                    nonStop: nonStopStr === 'true',
-                    tripType: tripType || undefined,
-                });
+                setLoading(true);
+                setError(null);
 
-                setFlights(results);
-            } catch (err) {
-                const errorMessage = err instanceof Error ? err.message : 'Failed to fetch flights';
-                setError(errorMessage);
-                setFlights([]);
-            } finally {
-                setLoading(false);
+                try {
+                    // For multi-city, fetch all segments
+                    console.log('[SearchResults] Calling searchFlights for multi-city with all segments:', multiCityRoutes);
+                    
+                    // Fetch flights for all segments
+                    const allSegmentResults: Flight[][] = [];
+                    
+                    for (let i = 0; i < multiCityRoutes.length; i++) {
+                        const segmentResults = await searchFlights({
+                            originLocationCode: multiCityRoutes[i].departure,
+                            destinationLocationCode: multiCityRoutes[i].arrival,
+                            departureDate: multiCityRoutes[i].date,
+                            adults: parseInt(adultsStr),
+                            children: parseInt(childrenStr) || undefined,
+                            cabinClass,
+                            nonStop: nonStopStr === 'true',
+                            tripType: 'one-way', // Fetch each segment as one-way
+                        });
+                        allSegmentResults.push(segmentResults);
+                    }
+
+                    // Combine flights from all segments into multi-city itineraries
+                    // For simplicity, pair first flight from each segment
+                    // In production, you'd show all combinations or use a more sophisticated matching
+                    const combinedFlights: Flight[] = [];
+                    
+                    if (allSegmentResults.length === 2) {
+                        // For 2-segment multi-city, combine matching flights
+                        const segment1Flights = allSegmentResults[0];
+                        const segment2Flights = allSegmentResults[1];
+                        
+                        segment1Flights.forEach((flight1, idx) => {
+                            if (segment2Flights[idx]) {
+                                const flight2 = segment2Flights[idx];
+                                const combinedFlight: Flight = {
+                                    ...flight1,
+                                    id: `${flight1.id}-${flight2.id}`, // Combine IDs
+                                    tripType: 'multi-city',
+                                    segments: [...flight1.segments, ...flight2.segments],
+                                    price: flight1.price + flight2.price, // Total price
+                                };
+                                combinedFlights.push(combinedFlight);
+                            }
+                        });
+                    } else if (allSegmentResults.length === 1) {
+                        combinedFlights.push(...allSegmentResults[0]);
+                    }
+
+                    setFlights(combinedFlights);
+                } catch (err) {
+                    const errorMessage = err instanceof Error ? err.message : 'Failed to fetch flights';
+                    setError(errorMessage);
+                    setFlights([]);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                // Handle one-way and round-trip
+                const departure = searchParams.get('departure');
+                const arrival = searchParams.get('arrival');
+                const departureDate = searchParams.get('departureDate');
+                const returnDate = searchParams.get('returnDate');
+
+                console.log('[SearchResults] URL params:', { departure, arrival, departureDate, returnDate, tripType });
+
+                // Validate required parameters
+                if (!departure || !arrival || !departureDate) {
+                    setError('Missing required search parameters');
+                    setFlights([]);
+                    return;
+                }
+
+                setLoading(true);
+                setError(null);
+
+                try {
+                    console.log('[SearchResults] Calling searchFlights with:', { departure, arrival, departureDate, returnDate, tripType });
+                    const results = await searchFlights({
+                        originLocationCode: departure,
+                        destinationLocationCode: arrival,
+                        departureDate,
+                        returnDate: returnDate || undefined,
+                        adults: parseInt(adultsStr),
+                        children: parseInt(childrenStr) || undefined,
+                        cabinClass,
+                        nonStop: nonStopStr === 'true',
+                        tripType: tripType || undefined,
+                    });
+
+                    setFlights(results);
+                } catch (err) {
+                    const errorMessage = err instanceof Error ? err.message : 'Failed to fetch flights';
+                    setError(errorMessage);
+                    setFlights([]);
+                } finally {
+                    setLoading(false);
+                }
             }
         };
 

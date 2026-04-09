@@ -35,9 +35,8 @@ const FlightSearchBox = () => {
     const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
     const [returnDate, setReturnDate] = useState<Dayjs | null>(null); // only used for roundtrip
 
-    // For multi-city: array of segments with departure/arrival/date
+    // For multi-city: array of segments with departure/arrival/date (max 2 segments)
     const [multiCityRoutes, setMultiCityRoutes] = useState<Array<{ departure: Airport | null; arrival: Airport | null; date: Dayjs | null }>>([
-        { departure: null, arrival: null, date: null },
         { departure: null, arrival: null, date: null },
         { departure: null, arrival: null, date: null }
     ]);
@@ -89,7 +88,13 @@ const FlightSearchBox = () => {
         searchParams.set('children', String(guests.children));
 
         if (tripType === 'multi-city') {
-            searchParams.set('segments', multiCitySegments.toString());
+            // Build multiStopDates parameter with pipe-separated dates
+            const multiStopDates = multiCityRoutes
+                .slice(0, multiCitySegments)
+                .map(route => route.date?.format('YYYY-MM-DD') || '')
+                .join('|');
+            searchParams.set('multiStopDates', multiStopDates);
+            
             for (let i = 0; i < multiCitySegments; i++) {
                 searchParams.set(`departure${i}`, multiCityRoutes[i].departure?.code || '');
                 searchParams.set(`arrival${i}`, multiCityRoutes[i].arrival?.code || '');
@@ -144,7 +149,7 @@ const FlightSearchBox = () => {
 
                 {tripType === 'multi-city' && (
                 <button onClick={() => setMultiCitySegments(multiCitySegments + 1)}
-                disabled={multiCitySegments >= 3}
+                disabled={multiCitySegments >= 2}
                 >
                     Add flight
                 </button>
