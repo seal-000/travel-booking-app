@@ -1,4 +1,4 @@
-/* Minimal Express proxy for Amadeus Locations (Airports) */
+/* Minimal Express proxy for Duffel */
 import dotenv from 'dotenv';
 import express from 'express';
 import axios from 'axios';
@@ -8,38 +8,16 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Simple in-memory token cache
-let accessToken = null;
-let tokenExpiry = 0; // epoch ms
-
-async function getAccessToken() {
-  const now = Date.now();
-  if (accessToken && tokenExpiry - 60000 > now) {
-    return accessToken;
+function getDuffelHeaders() {
+  const token = process.env.DUFFEL_ACCESS_TOKEN;
+  if (!token) {
+    throw new Error('Missing DUFFEL_ACCESS_TOKEN in environment');
   }
-
-  const clientId = process.env.AMADEUS_API_KEY;
-  const clientSecret = process.env.AMADEUS_API_SECRET;
-  if (!clientId || !clientSecret) {
-    throw new Error('Missing Amadeus credentials in environment');
-  }
-
-  const params = new URLSearchParams({
-    grant_type: 'client_credentials',
-    client_id: clientId,
-    client_secret: clientSecret,
-  });
-
-  const tokenRes = await axios.post(
-    'https://test.api.amadeus.com/v1/security/oauth2/token',
-    params,
-    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-  );
-
-  accessToken = tokenRes.data.access_token;
-  const expiresInSec = tokenRes.data.expires_in || 1800;
-  tokenExpiry = now + expiresInSec * 1000;
-  return accessToken;
+  return {
+    'Authorization': `Bearer ${token}`,
+    'Duffel-Version': 'v2',
+    'Content-Type': 'application/json'
+  };
 }
 
 app.get('/api/airports', async (req, res) => {
@@ -49,26 +27,38 @@ app.get('/api/airports', async (req, res) => {
       return res.json([]);
     }
 
-    const token = await getAccessToken();
     const apiRes = await axios.get(
-      'https://test.api.amadeus.com/v1/reference-data/locations',
+      'https://api.duffel.com/places/suggestions',
       {
         params: {
-          subType: 'AIRPORT',
-          keyword: query,
-          view: 'LIGHT',
+          query: query
         },
-        headers: { Authorization: `Bearer ${token}` },
+        headers: getDuffelHeaders()
       }
     );
 
+    // translates standard country codes into full country names (node.js built-in)
+    const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
+
     const data = Array.isArray(apiRes.data?.data) ? apiRes.data.data : [];
-    const airports = data.map((item) => ({
-      code: item.iataCode,
-      name: item.name,
-      city: item.address?.cityName || item.address?.cityCode || '',
-      country: item.address?.countryName || '',
-    }));
+    const airports = data
+      .filter(item => item.type === 'airport' || item.type === 'city')
+      .map((item) => {
+        let countryName = item.iata_country_code || '';
+        try {
+          if (item.iata_country_code) {
+            countryName = regionNames.of(item.iata_country_code) || countryName;
+          }
+        } catch (e) {
+          // ignore, fallback to the code itself
+        }
+        return {
+          code: item.iata_code,
+          name: item.name,
+          city: item.city_name || item.name || '',
+          country: countryName,
+        };
+      });
 
     res.json(airports);
   } catch (err) {
@@ -92,37 +82,69 @@ app.get('/api/flight-search', async (req, res) => {
 
     console.log('[Backend] Flight search request:', { originLocationCode, destinationLocationCode, departureDate, returnDate, adults, children, cabinClass, nonStop });
 
-    // Validate required params
     if (!originLocationCode || !destinationLocationCode || !departureDate) {
       return res.status(400).json({ error: 'Missing required parameters' });
     }
 
-    const token = await getAccessToken();
-
-    const params = {
-      originLocationCode,
-      destinationLocationCode,
-      departureDate,
-      adults: adults || '1',
-      travelClass: (cabinClass || 'ECONOMY').toUpperCase(),
-    };
-
-    if (returnDate) params.returnDate = returnDate;
-    if (children) params.children = children;
-    if (nonStop === 'true') params.nonStop = true;
-
-    console.log('[Backend] Amadeus API params:', params);
-
-    const flightRes = await axios.get(
-      'https://test.api.amadeus.com/v2/shopping/flight-offers',
+    const slices = [
       {
-        params,
-        headers: { Authorization: `Bearer ${token}` },
+        origin: originLocationCode,
+        destination: destinationLocationCode,
+        departure_date: departureDate,
+      }
+    ];
+
+    if (returnDate) {
+      slices.push({
+        origin: destinationLocationCode,
+        destination: originLocationCode,
+        departure_date: returnDate,
+      });
+    }
+
+    let passengers = [];
+    const numAdults = parseInt(adults) || 1;
+    for (let i = 0; i < numAdults; i++) {
+        passengers.push({ type: 'adult' });
+    }
+    const numChildren = parseInt(children) || 0;
+    for (let i = 0; i < numChildren; i++) {
+        passengers.push({ type: 'child' });
+    }
+
+    const requestPayload = {
+      data: {
+        slices,
+        passengers,
+        cabin_class: (cabinClass || 'economy').toLowerCase(),
+        return_offers: true
+      }
+    };
+    
+    // Duffel does not have a direct exact non-stop filter in the request creation, 
+    // but max_connections could be used if it was supported in the future or via filtering.
+    // For now we'll pass standard params.
+
+    console.log('[Backend] Duffel API params:', JSON.stringify(requestPayload, null, 2));
+
+    const flightRes = await axios.post(
+      'https://api.duffel.com/air/offer_requests',
+      requestPayload,
+      {
+        headers: getDuffelHeaders()
       }
     );
 
-    const flights = Array.isArray(flightRes.data?.data) ? flightRes.data.data : [];
-    console.log('[Backend] Amadeus returned', flights.length, 'flights');
+    let flights = Array.isArray(flightRes.data?.data?.offers) ? flightRes.data.data.offers : [];
+    
+    // Manual non-stop filter if requested
+    if (nonStop === 'true') {
+        flights = flights.filter(offer => {
+            return offer.slices.every(slice => slice.segments.length === 1);
+        });
+    }
+
+    console.log('[Backend] Duffel returned', flights.length, 'flights');
     res.json(flights);
   } catch (err) {
     console.error('Flight search error:', JSON.stringify(err?.response?.data, null, 2) || err.message);

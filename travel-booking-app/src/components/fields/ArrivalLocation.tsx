@@ -72,7 +72,7 @@ const ArrivalLocation: React.FC<ArrivalLocationProps> = ({ onAirportSelect, sele
                             <ListItemButton onClick={() => handleAirportSelect(airport, popupState)}>
                               <ListItemText 
                                 primary={`${airport.code} - ${airport.name}`}
-                                secondary={`${airport.city}, ${airport.country}`}
+                                secondary={`${airport.name}, ${airport.country}`}
                               />
                             </ListItemButton>
                           </ListItem>
