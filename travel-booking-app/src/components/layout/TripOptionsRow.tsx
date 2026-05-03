@@ -26,9 +26,9 @@ const TripOptionsRow: React.FC<TripOptionsRowProps> = ({ tripType, onTripTypeCha
     
     const cabinOptions = [
         { label: 'Economy', value: 'economy' },
-        { label: 'Premium Economy', value: 'premium' },
+        { label: 'Premium Economy', value: 'premium_economy' },
         { label: 'Business', value: 'business' },
-        { label: 'First Class', value: 'firstclass' },
+        { label: 'First Class', value: 'first' },
     ];
 
     

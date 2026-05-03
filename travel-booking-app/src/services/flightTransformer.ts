@@ -36,6 +36,12 @@ export interface DuffelSegment {
   marketing_carrier_flight_number: string;
   duration: string;
   stops: DuffelStop[];
+  passengers?: {
+    baggages?: {
+      quantity: number;
+      type: string;
+    }[];
+  }[];
 }
 
 export interface DuffelStop {
@@ -67,15 +73,19 @@ const CARRIER_CODE_TO_AIRLINE = airlinesData as Record<string, { name: string; l
 
 /**
  * Parse ISO 8601 duration string to human readable format
- * e.g., "PT18H5M" -> "18h 5m"
+ * e.g., "PT18H5M" -> "18h 5m" or "P1DT10H25M" -> "34h 25m"
  */
 function parseDuration(isoDuration: string): string {
-  const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+  const match = isoDuration.match(/P(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?/);
   if (!match) return isoDuration;
   
-  const hours = match[1] ? parseInt(match[1]) : 0;
-  const minutes = match[2] ? parseInt(match[2]) : 0;
+  const days = match[1] ? parseInt(match[1]) : 0;
+  let hours = match[2] ? parseInt(match[2]) : 0;
+  const minutes = match[3] ? parseInt(match[3]) : 0;
   
+  hours += days * 24;
+  
+  if (hours === 0 && minutes === 0) return '0m';
   if (hours === 0) return `${minutes}m`;
   if (minutes === 0) return `${hours}h`;
   return `${hours}h ${minutes}m`;
@@ -150,8 +160,10 @@ function transformItinerary(slice: DuffelSlice): FlightSegment {
     airlineLogo: airlineLogo,
     departureTime: formatTime(segments[0].departing_at),
     departureAirport: segments[0].origin.iata_code,
+    departureAirportName: segments[0].origin.name,
     arrivalTime: formatTime(segments[segments.length - 1].arriving_at),
     arrivalAirport: segments[segments.length - 1].destination.iata_code,
+    arrivalAirportName: segments[segments.length - 1].destination.name,
     duration: parseDuration(slice.duration),
     stops: totalStops,
     stopDetails: stopDetails.length > 0 ? stopDetails : undefined,
@@ -190,15 +202,36 @@ export function transformFlightOffer(offer: DuffelFlightOffer, userSearchTripTyp
     baseAmount = offer.base_amount;
   }
 
+  // Extract baggage information from the first segment's first passenger
+  let carryOnBags = 0;
+  let checkedBags = 0;
+  
+  const firstSegment = offer.slices?.[0]?.segments?.[0];
+  const firstPassengerBaggages = firstSegment?.passengers?.[0]?.baggages;
+  
+  if (firstPassengerBaggages && Array.isArray(firstPassengerBaggages)) {
+    for (const bag of firstPassengerBaggages) {
+      if (bag.type === 'carry_on') {
+         carryOnBags += bag.quantity;
+      } else if (bag.type === 'checked') {
+         checkedBags += bag.quantity;
+      }
+    }
+  } else {
+     // Fallback if not provided in the API response
+     carryOnBags = 1;
+     checkedBags = baseAmount < 200 ? 1 : 0;
+  }
+
   return {
     id: offer.id,
     tripType,
     segments: allSegments,
     price: Math.round(price),
     baggage: {
-      personalItem: true,
-      carryOn: true,
-      checkedBag: baseAmount < 200,
+      personalItem: 1, // Assume 1 personal item is always included
+      carryOn: carryOnBags,
+      checkedBag: checkedBags,
     },
     fareOptions,
   };

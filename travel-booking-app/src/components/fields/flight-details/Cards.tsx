@@ -142,7 +142,7 @@ const SegmentRow: React.FC<{ segment: FlightSegment; label?: string }> = ({ segm
 }
 
 const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
-  console.log('First card flight data:', flight);
+  console.log('Card flight data:', flight);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedFare] = useState<{ fare: FareOption; price: number } | null>(null);
 

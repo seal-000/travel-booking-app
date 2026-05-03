@@ -7,9 +7,9 @@ export interface Stop {
 }
 
 export interface Baggage {
-  personalItem: boolean;
-  carryOn: boolean;
-  checkedBag: boolean;
+  personalItem: number;
+  carryOn: number;
+  checkedBag: number;
 }
 
 export interface FlightSegment {
@@ -17,8 +17,10 @@ export interface FlightSegment {
   airlineLogo: string;
   departureTime: string;
   departureAirport: string;
+  departureAirportName?: string;
   arrivalTime: string;
   arrivalAirport: string;
+  arrivalAirportName?: string;
   duration: string;
   stops: number;
   stopDetails?: Stop[];

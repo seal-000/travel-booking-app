@@ -35,7 +35,7 @@ GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=LAX
 GET {{baseUrl}}/flight-search?originLocationCode=LAX&destinationLocationCode=LHR&departureDate=2026-05-01&adults=2&children=1
 
 ### Flight search with cabin class
-GET {{baseUrl}}/flight-search?originLocationCode=SFO&destinationLocationCode=CDG&departureDate=2026-06-01&adults=1&cabinClass=BUSINESS
+GET {{baseUrl}}/flight-search?originLocationCode=SFO&destinationLocationCode=CDG&departureDate=2026-06-01&adults=1&cabinClass=FIRST
 
 ### Non-stop flights only
 GET {{baseUrl}}/flight-search?originLocationCode=JFK&destinationLocationCode=MIA&departureDate=2026-04-10&adults=1&nonStop=true

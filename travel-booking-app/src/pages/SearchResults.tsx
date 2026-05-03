@@ -17,7 +17,7 @@ const SearchResults: React.FC = () => {
     const [filters, setFilters] = useState<FilterState>({
         airlines: [],
         stops: [],
-        priceRange: [0, 3000],
+        priceRange: [0, 15000],
     });
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
@@ -227,7 +227,7 @@ const SearchResults: React.FC = () => {
                 <FilterSidebar 
                     filters={filters} 
                     onFilterChange={setFilters} 
-                    maxPrice={3000}
+                    maxPrice={15000}
                     availableAirlines={availableAirlines}
                     isMobileOpen={mobileFiltersOpen}
                     onMobileClose={() => setMobileFiltersOpen(!mobileFiltersOpen)}
