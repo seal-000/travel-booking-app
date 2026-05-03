@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { transformFlightOffers } from './flightTransformer';
 import type { Flight } from './types';
-import type { AmadeusFlightOffer } from './flightTransformer';
+import type { DuffelFlightOffer } from './flightTransformer';
 
 export async function searchFlights(params: {
   originLocationCode: string;
@@ -28,9 +28,9 @@ export async function searchFlights(params: {
       },
     });
     
-    // Transform Amadeus API response to application format
+    // Transform API response to application format
     const flightOffers = Array.isArray(data) ? data : [];
-    return transformFlightOffers(flightOffers as AmadeusFlightOffer[], params.tripType);
+    return transformFlightOffers(flightOffers as DuffelFlightOffer[], params.tripType);
   } catch (err) {
     console.error('Flight search failed:', err);
     return [];

@@ -183,8 +183,8 @@ const SearchResults: React.FC = () => {
         return flights.filter((flight: Flight) => {
             // Filter by airline
             if (filters.airlines.length > 0) {
-                const flightAirline = flight.segments[0]?.airline;
-                if (!flightAirline || !filters.airlines.includes(flightAirline)) {
+                const hasMatchingAirline = flight.segments.some(segment => filters.airlines.includes(segment.airline));
+                if (!hasMatchingAirline) {
                     return false;
                 }
             }
