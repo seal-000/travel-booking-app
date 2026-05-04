@@ -166,12 +166,12 @@ export function transformFlightOffer(offer: DuffelFlightOffer, userSearchTripTyp
   // Use the user's search trip type if provided, otherwise infer from API response
   const tripType = (userSearchTripType || (offer.slices.length === 1 ? 'one-way' : 'round-trip')) as any;
   
-  console.log(`[Transformer] Processing flight with tripType: ${tripType}, slices: ${offer.slices?.length}`);
+  //console.log(`[Transformer] Processing flight with tripType: ${tripType}, slices: ${offer.slices?.length}`);
   
   // Transform each itinerary to a single flight segment
   const allSegments = (offer.slices || []).map(slice => transformItinerary(slice));
   
-  console.log(`[Transformer] Created ${allSegments.length} segments from ${offer.slices?.length} slices`);
+  //console.log(`[Transformer] Created ${allSegments.length} segments from ${offer.slices?.length} slices`);
 
   // TODO: Fare options would come from Amadeus API pricing details
   const fareOptions: any[] = [];
