@@ -17,7 +17,7 @@ const SearchResults: React.FC = () => {
     const [filters, setFilters] = useState<FilterState>({
         airlines: [],
         stops: [],
-        priceRange: [0, 3000],
+        priceRange: [0, 30000], 
     });
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
@@ -209,17 +209,11 @@ const SearchResults: React.FC = () => {
     return (
         <div>
         <section className='modify-search'>
-        
-         <Box sx={{ 
-           mx: 'auto', 
-           transform: { xs: 'scale(0.45)', sm: 'scale(0.5)', md: 'scale(0.6)' }, 
-           transformOrigin: 'top center',
-           px: { xs: 3, sm: 5, md: 7 },
-         }}>
-           <FlightSearchBox />
-         </Box>
-        
-        
+            <div className="modify-search-inner">
+                <Box sx={{ maxWidth: '1200px', mx: 'auto' }}>
+                    <FlightSearchBox />
+                </Box>
+            </div>
         </section>
         <section className='show-card-info'>
             <Box sx={{ mx: 'auto', p: { xs: 2, md: 3 }, display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
@@ -227,7 +221,7 @@ const SearchResults: React.FC = () => {
                 <FilterSidebar 
                     filters={filters} 
                     onFilterChange={setFilters} 
-                    maxPrice={3000}
+                    maxPrice={30000}
                     availableAirlines={availableAirlines}
                     isMobileOpen={mobileFiltersOpen}
                     onMobileClose={() => setMobileFiltersOpen(!mobileFiltersOpen)}
