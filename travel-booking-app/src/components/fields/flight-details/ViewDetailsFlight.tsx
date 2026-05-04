@@ -424,11 +424,13 @@ export const ViewDetailsFlight: React.FC<ViewDetailsFlightProps> = ({
           </Button>
           <Button
             variant="contained"
+            disabled
             sx={{
               bgcolor: '#0071c2',
               '&:hover': { bgcolor: '#005999' },
               textTransform: 'none',
               fontWeight: 600,
+              
             }}
           >
             Continue Booking
