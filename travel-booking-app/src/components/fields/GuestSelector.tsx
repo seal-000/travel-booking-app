@@ -70,7 +70,28 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
             <FontAwesomeIcon icon={faUsers} />
             {displayText}
           </Button>
-          <Popper {...bindPopper(popupState)} placement="bottom-start" transition>
+          <Popper 
+            {...bindPopper(popupState)} 
+            placement="bottom-start" 
+            transition 
+            style={{ zIndex: 1300 }}
+            modifiers={[
+              {
+                name: 'flip',
+                enabled: false,
+              },
+              {
+                name: 'preventOverflow',
+                enabled: true,
+                options: {
+                  altAxis: true,
+                  altBoundary: true,
+                  tether: true,
+                  rootBoundary: 'document',
+                }
+              }
+            ]}
+          >
             {({ TransitionProps }) => (
               <ClickAwayListener onClickAway={() => popupState.close()}>
                 <Fade {...TransitionProps} timeout={350}>
@@ -95,6 +116,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
                           sx={{
                             border: '1px solid #ddd',
                             borderRadius: '4px',
+                            bgcolor: '#f5f5f5',
                             '&:hover': { bgcolor: '#f5f5f5' },
                           }}
                         >
@@ -109,6 +131,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
                           sx={{
                             border: '1px solid #ddd',
                             borderRadius: '4px',
+                            bgcolor: '#f5f5f5',
                             '&:hover': { bgcolor: '#f5f5f5' },
                           }}
                         >
@@ -135,6 +158,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
                           sx={{
                             border: '1px solid #ddd',
                             borderRadius: '4px',
+                            bgcolor: '#f5f5f5',
                             '&:hover': { bgcolor: '#f5f5f5' },
                           }}
                         >
@@ -149,6 +173,7 @@ const GuestSelector: React.FC<GuestSelectorProps> = ({
                           sx={{
                             border: '1px solid #ddd',
                             borderRadius: '4px',
+                            bgcolor: '#f5f5f5',
                             '&:hover': { bgcolor: '#f5f5f5' },
                           }}
                         >

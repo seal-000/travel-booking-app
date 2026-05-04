@@ -50,7 +50,28 @@ const DepartureLocation: React.FC<DepartureLocationProps> = ({ onAirportSelect, 
             <FontAwesomeIcon icon={faPlaneDeparture} />
             {selectedAirport ? `${selectedAirport.code} - ${selectedAirport.city}` : 'Leaving from'}
           </Button>
-          <Popper {...bindPopper(popupState)} placement="bottom-start" transition>
+          <Popper 
+            {...bindPopper(popupState)} 
+            placement="bottom-start" 
+            transition 
+            style={{ zIndex: 1300 }}
+            modifiers={[
+              {
+                name: 'flip',
+                enabled: false,
+              },
+              {
+                name: 'preventOverflow',
+                enabled: true,
+                options: {
+                  altAxis: true,
+                  altBoundary: true,
+                  tether: true,
+                  rootBoundary: 'document',
+                }
+              }
+            ]}
+          >
             {({ TransitionProps }) => (
               <ClickAwayListener onClickAway={() => popupState.close()}>
                 <Fade {...TransitionProps} timeout={350}>
