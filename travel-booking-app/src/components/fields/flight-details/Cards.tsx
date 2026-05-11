@@ -12,7 +12,7 @@ import {
   FlightLand,
   AccessTime,
 } from '@mui/icons-material';
-import type { Flight, FlightSegment, FareOption, Stop } from '../../../services/types';
+import type { Flight, FlightSegment, Stop } from '../../../services/types';
 import { ViewDetailsFlight } from './ViewDetailsFlight';
 import './Cards.css';
 
@@ -144,7 +144,7 @@ const SegmentRow: React.FC<{ segment: FlightSegment; label?: string }> = ({ segm
 const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
   console.log('First card flight data:', flight);
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedFare] = useState<{ fare: FareOption; price: number } | null>(null);
+  
 
   const getSegmentLabel = (index: number, tripType: string, totalSegments: number): string | undefined => {
     if (tripType === 'round-trip') {
@@ -159,41 +159,6 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
   return (
     <Card className="flight-card">
       <CardContent className="flight-card-content">
-        {/* Deal/Badge Row */}
-        {(flight.isCheapest || flight.isBest || flight.isFastest || flight.dealType) && (
-          <Box className="badge-row">
-            {flight.isCheapest && (
-              <Chip
-                label="Cheapest"
-                size="small"
-                sx={{ bgcolor: '#e6f7ed', color: '#008234', fontWeight: 600 }}
-              />
-            )}
-            {flight.isBest && (
-              <Chip
-                label="Best"
-                size="small"
-                sx={{ bgcolor: '#fef3cd', color: '#856404', fontWeight: 600 }}
-              />
-            )}
-            {flight.isFastest && (
-              <Chip
-                label="Fastest"
-                size="small"
-                icon={<AccessTime sx={{ fontSize: 14 }} />}
-                sx={{ bgcolor: '#e3f2fd', color: '#0071c2', fontWeight: 600 }}
-              />
-            )}
-            {flight.dealType && (
-              <Chip
-                label={flight.dealType}
-                size="small"
-                sx={{ bgcolor: '#f8e6f1', color: '#a61a6e', fontWeight: 600 }}
-              />
-            )}
-          </Box>
-        )}
-
         {/* Main Content */}
         <Box className="flight-card-main">
           {/* Flight Segments */}
@@ -248,7 +213,6 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight }) => {
         {/* View Details Dialog */}
         <ViewDetailsFlight
           flight={flight}
-          initialFare={selectedFare?.fare || flight.fareOptions?.[0]}
           open={showDetails}
           onClose={() => setShowDetails(false)}
         />

@@ -12,6 +12,19 @@ export interface Baggage {
   checkedBag: boolean;
 }
 
+export interface FlightLeg {
+  departureAirport: string;
+  departureTime: string;
+  departureDate: string;
+  arrivalAirport: string;
+  arrivalTime: string;
+  arrivalDate: string;
+  airline: string;
+  airlineLogo: string;
+  flightNumber: string;
+  duration: string;
+}
+
 export interface FlightSegment {
   airline: string;
   airlineLogo: string;
@@ -23,14 +36,9 @@ export interface FlightSegment {
   stops: number;
   stopDetails?: Stop[];
   date: string;
+  legs?: FlightLeg[];
 }
 
-export interface FareOption {
-  name: string;
-  priceModifier: number; // multiplier for base price
-  benefits: string[];
-  checked?: boolean;
-}
 
 export interface Flight {
   id: string;
@@ -38,15 +46,6 @@ export interface Flight {
   segments: FlightSegment[];  // 1 for one-way, 2 for round-trip, 2+ for multi-city
   price: number;
   originalPrice?: number;
-  isCheapest?: boolean;
-  isBest?: boolean;
-  isFastest?: boolean;
-  dealType?: string;
   baggage: Baggage;
-  fareOptions?: FareOption[];
 }
 
-export interface AirlineFareOptions {
-  airline: string;
-  options: FareOption[];
-}
