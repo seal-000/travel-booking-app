@@ -7,9 +7,9 @@ export interface Stop {
 }
 
 export interface Baggage {
-  personalItem: boolean;
-  carryOn: boolean;
-  checkedBag: boolean;
+  personalItem: number;
+  carryOn: number;
+  checkedBag: number;
 }
 
 export interface FlightLeg {

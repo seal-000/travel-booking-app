@@ -36,6 +36,10 @@ export interface DuffelSegment {
   marketing_carrier_flight_number: string;
   duration: string;
   stops: DuffelStop[];
+  passengers?: {
+    id: string;
+    baggages: { type: string; quantity: number }[];
+  }[];
 }
 
 export interface DuffelStop {
@@ -48,22 +52,7 @@ export interface DuffelPassenger {
   type: string;
 }
 
-/**
- 
-// No longer needed since we switched to Amadeus API
-// Mapping of airline carrier codes to airline names and logos (imported from airlines.json)
-const CARRIER_CODE_TO_AIRLINE = airlinesData as Record<string, { name: string; logo: string }>;
 
-    function getAirlineInfo(carrierCode: string): { name: string; logo: string } {
-      const info = CARRIER_CODE_TO_AIRLINE[carrierCode as keyof typeof CARRIER_CODE_TO_AIRLINE];
-      return info || { 
-        name: carrierCode, 
-        logo: 'https://via.placeholder.com/32?text=✈' 
-      };
-    }
-
-
- **/
 
 /**
  * Parse ISO 8601 duration string to human readable format
@@ -116,7 +105,7 @@ function calculateLayover(arrivalTime: string, departureTime: string): string {
 }
 
 /**
- * Transform an Amadeus Itinerary (which may contain multiple segments/legs) to a single application FlightSegment
+ * Transform an Duffel Slice (which may contain multiple segments/legs) to a single application FlightSegment
  * Combines all legs of a journey with stops into one segment
  */
 function transformItinerary(slice: DuffelSlice): FlightSegment {
@@ -145,6 +134,22 @@ function transformItinerary(slice: DuffelSlice): FlightSegment {
     layoverTime: calculateLayover(segments[index].arriving_at, segment.departing_at),
   }));
 
+  const legs = segments.map((segment) => {
+    const legCarrier = segment.marketing_carrier || segment.operating_carrier;
+    return {
+      departureAirport: segment.origin.name ? `${segment.origin.iata_code} · ${segment.origin.name}` : segment.origin.iata_code,
+      departureTime: formatTime(segment.departing_at),
+      departureDate: formatDate(segment.departing_at),
+      arrivalAirport: segment.destination.name ? `${segment.destination.iata_code} · ${segment.destination.name}` : segment.destination.iata_code,
+      arrivalTime: formatTime(segment.arriving_at),
+      arrivalDate: formatDate(segment.arriving_at),
+      airline: legCarrier?.name || legCarrier?.iata_code || '',
+      airlineLogo: legCarrier?.logo_symbol_url || 'https://via.placeholder.com/32?text=✈',
+      flightNumber: `${legCarrier?.iata_code}${segment.marketing_carrier_flight_number || segment.operating_carrier_flight_number}`,
+      duration: parseDuration(segment.duration),
+    };
+  });
+
   return {
     airline: airlineName,
     airlineLogo: airlineLogo,
@@ -156,11 +161,12 @@ function transformItinerary(slice: DuffelSlice): FlightSegment {
     stops: totalStops,
     stopDetails: stopDetails.length > 0 ? stopDetails : undefined,
     date: formatDate(segments[0].departing_at),
+    legs,
   };
 }
 
 /**
- * Transform Amadeus FlightOffer to application Flight
+ * Transform a single Duffel FlightOffer to the application's Flight format
  */
 export function transformFlightOffer(offer: DuffelFlightOffer, userSearchTripType?: string): Flight {
   // Use the user's search trip type if provided, otherwise infer from API response
@@ -173,8 +179,6 @@ export function transformFlightOffer(offer: DuffelFlightOffer, userSearchTripTyp
   
   //console.log(`[Transformer] Created ${allSegments.length} segments from ${offer.slices?.length} slices`);
 
-  // TODO: Fare options would come from Amadeus API pricing details
-  const fareOptions: any[] = [];
   
   let price = 0;
   let baseAmount = 0;
@@ -190,22 +194,37 @@ export function transformFlightOffer(offer: DuffelFlightOffer, userSearchTripTyp
     baseAmount = offer.base_amount;
   }
 
+  // Extract baggage from Duffel's passenger data
+  let carryOnQty = 0;
+  let checkedQty = 0;
+
+  try {
+    const firstSegment = offer.slices?.[0]?.segments?.[0];
+    if (firstSegment?.passengers?.[0]?.baggages) {
+      for (const bag of firstSegment.passengers[0].baggages) {
+        if (bag.type === 'carry_on') carryOnQty += bag.quantity || 0;
+        if (bag.type === 'checked') checkedQty += bag.quantity || 0;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to parse baggage data', e);
+  }
+
   return {
     id: offer.id,
     tripType,
     segments: allSegments,
     price: Math.round(price),
     baggage: {
-      personalItem: true,
-      carryOn: true,
-      checkedBag: baseAmount < 200,
-    },
-    fareOptions,
+      personalItem: 1, // default to 1 personal item
+      carryOn: carryOnQty,
+      checkedBag: checkedQty,
+    }
   };
 }
 
 /**
- * Transform array of Amadeus FlightOffers to application Flights
+ * Transform array of Duffel FlightOffers to array of application Flights
  */
 export function transformFlightOffers(offers: DuffelFlightOffer[], userSearchTripType?: string): Flight[] {
   return offers.map(offer => transformFlightOffer(offer, userSearchTripType));
