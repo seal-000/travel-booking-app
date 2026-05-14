@@ -1,5 +1,6 @@
 import './Home.css'
 import FlightSearchBox from '../components/flight-search/FlightSearchBox'
+import airplane from '../assets/airplane.svg'
 
 const Home = () => {
   return (
@@ -11,8 +12,13 @@ const Home = () => {
       </section>
 
       <section className="middle-section">
-          <h2 className='middle-text top'>Discover your next flight with us</h2>
-          <h2 className='middle-text bottom'>Find your Dream Destination</h2>
+          <div className="middle-header-container">
+            <div className="text-container">
+              <h2 className='middle-text top'>Discover your next flight with us</h2>
+              <h2 className='middle-text bottom'>Find your Dream Destination</h2>
+            </div>
+            <img src={airplane} alt="Airplane animation" className="airplane-decoration" />
+          </div>
           <FlightSearchBox />
           
       </section>

@@ -44,6 +44,22 @@
   text-align: left;
 }
 
+.middle-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.airplane-decoration {
+  width: 15vw; /* Responsive scaling */
+  max-width: 180px; 
+  min-width: 80px;
+  height: auto;
+  object-fit: contain;
+}
+
 .middle-text.top {
   font-weight: bold;
 }
