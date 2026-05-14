@@ -181,17 +181,10 @@ export function transformFlightOffer(offer: DuffelFlightOffer, userSearchTripTyp
 
   
   let price = 0;
-  let baseAmount = 0;
   if (typeof offer.total_amount === 'string') {
     price = parseFloat(offer.total_amount);
   } else if (typeof offer.total_amount === 'number') {
     price = offer.total_amount;
-  }
-  
-  if (typeof offer.base_amount === 'string') {
-    baseAmount = parseFloat(offer.base_amount);
-  } else if (typeof offer.base_amount === 'number') {
-    baseAmount = offer.base_amount;
   }
 
   // Extract baggage from Duffel's passenger data

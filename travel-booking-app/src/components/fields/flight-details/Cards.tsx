@@ -4,13 +4,11 @@ import {
   Card,
   CardContent,
   Typography,
-  Chip,
   Button,
 } from '@mui/material';
 import {
   FlightTakeoff,
   FlightLand,
-  AccessTime,
 } from '@mui/icons-material';
 import type { Flight, FlightSegment, Stop } from '../../../services/types';
 import { ViewDetailsFlight } from './ViewDetailsFlight';
@@ -228,7 +226,7 @@ interface FlightCardsProps {
   flights?: Flight[];
 }
 
-export const FlightCards: React.FC<FlightCardsProps> = ({ filters, flights: initialFlights }) => {
+export const FlightCards: React.FC<FlightCardsProps> = ({ flights: initialFlights }) => {
   const flightsList = initialFlights || [];
 
   if (flightsList.length === 0) {
