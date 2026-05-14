@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import './App.css';
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Home from './pages/Home.tsx';
 import SearchResults from './pages/SearchResults.tsx';
 
