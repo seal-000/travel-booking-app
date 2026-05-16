@@ -259,4 +259,6 @@ From that point on, every push to `main` will build a new Docker image, push it 
 
 ## License
 
-MIT License — feel free to use this project as a reference or starting point.
+Distributed under the MIT License. See `LICENSE` for more information.
+
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
