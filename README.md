@@ -17,25 +17,23 @@
 - [Future Improvements](#future-improvements)
 - [License](#license)
 
----
+
 
 ## Project Overview
 
 A full-stack app where you can search for flights and explore detailed information before booking. It shows a list of possible flights for travelers planning their next trip, with a responsive interface. The project is built with a production-ready infrastructure: Dockerized for consistency, powered by the Duffel API for live flight data, and hosted on AWS using ECS Fargate with automated deployments via GitHub Actions.
 
----
+
 
 ## Demo
 
 🌐 **Live**: [http://travel-app-alb-128502854.us-east-2.elb.amazonaws.com/](http://travel-app-alb-128502854.us-east-2.elb.amazonaws.com/)
 
-![flight-search](image.png)
+<img width="2537" height="1266" alt="image" src="https://github.com/user-attachments/assets/e6300cf5-00ff-4272-9587-fbc48bc63e6e" />
+<img width="2533" height="1258" alt="image-1" src="https://github.com/user-attachments/assets/4a936511-d227-4318-a564-8141a5d6ea74" />
+<img width="2553" height="1266" alt="image-2" src="https://github.com/user-attachments/assets/f07d9ee6-e26d-43ae-a483-cb567fab1062" />
 
-![flight-result](image-1.png)
 
-![flight-view-card-detail](image-2.png)
-
----
 
 ## Features
 
@@ -44,7 +42,7 @@ A full-stack app where you can search for flights and explore detailed informati
 - 🎛️ **Results Filtering** — Filter results in real time by number of stops (Direct, 1 stop, 2+ stops), price range, and specific airline
 - 🔎 **Flight Details Modal** — Click "View Details" on any result to see a full breakdown: full airport names, flight number, airline, each leg of the journey with layover airports and wait times, total flight duration, and baggage inclusions (personal item, carry-on, checked bag)
 
----
+
 
 ## Tech Stack
 
@@ -59,7 +57,7 @@ A full-stack app where you can search for flights and explore detailed informati
 | Compute      | AWS ECS (Elastic Container Service) + Fargate   |
 | Networking   | AWS ALB (Application Load Balancer)             |
 
----
+
 
 ## Architecture
 
@@ -83,7 +81,7 @@ AWS ECS Fargate (Docker Container, Port 3001)
   └── Duffel API (live flight data)
 ```
 
----
+
 
 ## Getting Started
 
@@ -101,7 +99,7 @@ git clone https://github.com/seal-000/travel-booking-app.git
 cd travel-booking-app
 ```
 
----
+
 
 ## Environment Variables
 
@@ -115,7 +113,7 @@ DUFFEL_ACCESS_TOKEN=your_duffel_token_here
 > ⚠️ Never commit your `.env` file. It is already included in `.gitignore`.  
 > In production on AWS, this is set directly in the ECS Task Definition.
 
----
+
 
 ## Running with Docker
 
@@ -128,7 +126,7 @@ docker run -p 3001:3001 --env DUFFEL_ACCESS_TOKEN=your_token travel-app
 
 The app will be available at `http://localhost:3001`.
 
----
+
 
 ## Running Locally (Without Docker)
 
@@ -140,7 +138,7 @@ npm run dev
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:3001`
 
----
+
 
 ## Project Structure
 
@@ -171,7 +169,7 @@ travel-booking-app/
     └── vite.config.ts          # Vite build configuration
 ```
 
----
+
 
 ## CI/CD Pipeline
 
@@ -192,9 +190,9 @@ Every push to the `main` branch triggers an automated deployment via GitHub Acti
 | `AWS_ACCESS_KEY_ID` | AWS IAM access key |
 | `AWS_SECRET_ACCESS_KEY` | AWS IAM secret key |
 
-No manual steps required — every merge to `main` ships to production automatically.
+No manual steps required every merge to `main` ships to production automatically.
 
----
+
 
 ## AWS Deployment Guide
 
@@ -211,7 +209,7 @@ AWS ECR is Amazon's private Docker image registry.
 
 📖 [Amazon ECR – Pushing a Docker Image](https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html)
 
----
+
 
 ### Step 2 — Run the Container with ECS + Fargate
 
@@ -235,7 +233,7 @@ AWS ECR is Amazon's private Docker image registry.
 
 📖 [Deploy an App on ECS using Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/getting-started-fargate.html)
 
----
+
 
 ### Step 3 — GitHub Actions Automation
 
@@ -246,7 +244,7 @@ After the initial setup, all future deployments are fully automated. Add your AW
 
 From that point on, every push to `main` will build a new Docker image, push it to ECR, and force ECS to redeploy.
 
----
+
 
 ## Future Improvements
 
@@ -256,7 +254,8 @@ From that point on, every push to `main` will build a new Docker image, push it 
 - [ ] Better test coverage following best practices
 - [ ] HTTPS and custom domain via AWS Route 53 + ACM
 
----
+
+
 
 ## License
 
