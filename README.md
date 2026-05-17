@@ -7,7 +7,7 @@
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
-- [Challenges & Decisions](#challenges-decisions)
+- [Challenges & Decisions](#challenges--decisions)
 - [Testing](#testing)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
