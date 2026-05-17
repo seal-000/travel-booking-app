@@ -7,6 +7,8 @@
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
+- [Challenges & Decisions](#challenges-decisions)
+- [Testing](#testing)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
 - [Running with Docker](#running-with-docker)
@@ -81,7 +83,20 @@ AWS ECS Fargate (Docker Container, Port 3001)
   └── Duffel API (live flight data)
 ```
 
+## Challenges & Decisions
 
+- Initially integrated the Amadeus API for flight data, but switched to Duffel after Amadeus removed their free tier. This required re-evaluating API options, re-parsing the entire JSON response structure, and updating all related services and types across the codebase.
+- Validated the Duffel API through a standalone HTML file before integrating it into the app, to confirm the response shape before committing to a full rewrite.
+
+## Testing
+
+Before integrating the Duffel API into the app, the connection was validated through a test script. It checks that the API token is valid, hits the Duffel places endpoint, and confirms the response shape is correct.
+ 
+```bash
+node travel-booking-app/src/test/test-duffel.js
+```
+ 
+Make sure your `.env` file has `DUFFEL_ACCESS_TOKEN` set before running.
 
 ## Getting Started
 
