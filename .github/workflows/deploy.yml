@@ -49,6 +49,6 @@ jobs:
               "docker pull 269531437211.dkr.ecr.us-east-2.amazonaws.com/travel-app:latest",
               "docker stop travel-app || true",
               "docker rm travel-app || true",
-              "docker run -d --name travel-app --restart unless-stopped -p 3001:3001 -e DUFFEL_API_TOKEN=\"$DUFFEL_API_TOKEN\" 269531437211.dkr.ecr.us-east-2.amazonaws.com/travel-app:latest"
+              "docker run -d --name travel-app --restart unless-stopped --env-file /etc/travel-app.env -p 3001:3001 269531437211.dkr.ecr.us-east-2.amazonaws.com/travel-app:latest"
             ]' \
             --region ${{ env.AWS_REGION }}
