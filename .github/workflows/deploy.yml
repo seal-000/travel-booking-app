@@ -1,15 +1,14 @@
-name: Deploy to Amazon ECS
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - main # Change this to the branch you want to trigger the deployment
+      - main
 
 env:
-  AWS_REGION: us-east-2                   #  AWS region
-  ECR_REPOSITORY: travel-app              #  Amazon ECR repository name
-  ECS_CLUSTER: travel-app-cluster         #  Amazon ECS cluster name
-  ECS_SERVICE: travel-app-task-definition-service-rielbc6u        # IMPORTANT: ECS Service name
+  AWS_REGION: us-east-2
+  ECR_REPOSITORY: travel-app
+  EC2_INSTANCE_ID: i-098430593d0f7c278
 
 jobs:
   deploy:
@@ -17,31 +16,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: latest
-      run: |
-        # Build a docker container and push it to ECR
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Build and push Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
+        run: |
+          cd travel-booking-app
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-    - name: Force new deployment on ECS
-      run: |
-        # Tells AWS to pull the latest image and restart the containers
-        aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --service ${{ env.ECS_SERVICE }} --force-new-deployment
+      - name: Deploy to EC2
+        run: |
+          aws ssm send-command \
+            --instance-ids ${{ env.EC2_INSTANCE_ID }} \
+            --document-name "AWS-RunShellScript" \
+            --parameters 'commands=[
+              "aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 269531437211.dkr.ecr.us-east-2.amazonaws.com",
+              "docker pull 269531437211.dkr.ecr.us-east-2.amazonaws.com/travel-app:latest",
+              "docker stop travel-app || true",
+              "docker rm travel-app || true",
+              "docker run -d --name travel-app --restart unless-stopped -p 3001:3001 -e DUFFEL_API_TOKEN=\"$DUFFEL_API_TOKEN\" 269531437211.dkr.ecr.us-east-2.amazonaws.com/travel-app:latest"
+            ]' \
+            --region ${{ env.AWS_REGION }}
