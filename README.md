@@ -29,7 +29,7 @@ A full-stack app where you can search for flights and explore detailed informati
 
 ## Demo
 
-🌐 **Live**: [http://travel-app-alb-128502854.us-east-2.elb.amazonaws.com/](http://travel-app-alb-128502854.us-east-2.elb.amazonaws.com/)
+🌐 **Live**: [http://travel-app-alb-128502854.us-east-2.elb.amazonaws.com/](http://ec2-3-23-17-215.us-east-2.compute.amazonaws.com)
 
 <img width="2537" height="1266" alt="image" src="https://github.com/user-attachments/assets/e6300cf5-00ff-4272-9587-fbc48bc63e6e" />
 <img width="2533" height="1258" alt="image-1" src="https://github.com/user-attachments/assets/4a936511-d227-4318-a564-8141a5d6ea74" />
